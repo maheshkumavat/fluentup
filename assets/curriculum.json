@@ -1,0 +1,362 @@
+[
+  {
+    "id": "a1_u1",
+    "level": "A1",
+    "title": "Present Simple for Daily Habits",
+    "explanation": "Use the present simple to talk about things you do regularly or routines. Add an 's' or 'es' at the end of the verb for he, she, or it.",
+    "example_correct": "She walks to work every morning.",
+    "example_common_mistake": "She walk to work every morning."
+  },
+  {
+    "id": "a1_u2",
+    "level": "A1",
+    "title": "Articles: A, An, and The",
+    "explanation": "Use 'a' before words starting with a consonant sound, and 'an' before vowel sounds (a, e, i, o, u). Use 'the' when talking about a specific item.",
+    "example_correct": "I ate an apple and a sandwich for lunch.",
+    "example_common_mistake": "I ate a apple and an sandwich for lunch."
+  },
+  {
+    "id": "a1_u3",
+    "level": "A1",
+    "title": "Simple Questions (What, Where, When)",
+    "explanation": "Start your question with a question word like What, Where, or When, followed by do or does, and then the person.",
+    "example_correct": "Where do you live?",
+    "example_common_mistake": "Where you live?"
+  },
+  {
+    "id": "a1_u4",
+    "level": "A1",
+    "title": "Plural Nouns (Regular & Irregular)",
+    "explanation": "Add 's' or 'es' to make most nouns plural. Some special words change completely, like child to children or person to people.",
+    "example_correct": "Three children are playing in the park.",
+    "example_common_mistake": "Three childs are playing in the park."
+  },
+  {
+    "id": "a1_u5",
+    "level": "A1",
+    "title": "Possessive Adjectives (My, Your, His, Her)",
+    "explanation": "Use my, your, his, her, our, and their to show who owns something. Place them right before the noun.",
+    "example_correct": "This is her book on the table.",
+    "example_common_mistake": "This is she book on the table."
+  },
+  {
+    "id": "a1_u6",
+    "level": "A1",
+    "title": "Adjectives Before Nouns",
+    "explanation": "In English, describe words (adjectives) always come before the thing they describe, not after.",
+    "example_correct": "He drives a red car.",
+    "example_common_mistake": "He drives a car red."
+  },
+  {
+    "id": "a1_u7",
+    "level": "A1",
+    "title": "Prepositions of Place (In, On, At)",
+    "explanation": "Use 'in' for enclosed spaces or cities, 'on' for surfaces, and 'at' for specific points or locations.",
+    "example_correct": "She is sitting at her desk in the office.",
+    "example_common_mistake": "She is sitting on her desk inside the office."
+  },
+  {
+    "id": "a1_u8",
+    "level": "A1",
+    "title": "Can and Can't for Ability",
+    "explanation": "Use 'can' to show you are able to do something, and 'can't' to show you cannot. Never add 'to' after can.",
+    "example_correct": "I can speak English well.",
+    "example_common_mistake": "I can to speak English well."
+  },
+  {
+    "id": "a1_u9",
+    "level": "A1",
+    "title": "Imperatives for Simple Commands",
+    "explanation": "Use the main action verb at the start of a sentence to give instructions or directions.",
+    "example_correct": "Please open the window.",
+    "example_common_mistake": "Please to open the window."
+  },
+  {
+    "id": "a2_u1",
+    "level": "A2",
+    "title": "Past Simple for Finished Events",
+    "explanation": "Use the past simple to talk about actions completed in the past. Regular verbs end with '-ed'.",
+    "example_correct": "We visited London last summer.",
+    "example_common_mistake": "We visit London last summer."
+  },
+  {
+    "id": "a2_u2",
+    "level": "A2",
+    "title": "Present Continuous for Current Actions",
+    "explanation": "Use am/is/are + verb ending in '-ing' for things happening right now or temporary situations.",
+    "example_correct": "They are studying in the library right now.",
+    "example_common_mistake": "They studying in the library right now."
+  },
+  {
+    "id": "a2_u3",
+    "level": "A2",
+    "title": "Going To for Future Intentions",
+    "explanation": "Use am/is/are + going to + verb when you have already planned to do something in the future.",
+    "example_correct": "I am going to buy a new laptop tomorrow.",
+    "example_common_mistake": "I going to buy a new laptop tomorrow."
+  },
+  {
+    "id": "a2_u4",
+    "level": "A2",
+    "title": "Comparatives (-er / more)",
+    "explanation": "Use '-er' for short words and 'more' for longer words when comparing two things, followed by 'than'.",
+    "example_correct": "This phone is faster than my old one.",
+    "example_common_mistake": "This phone is more fast than my old one."
+  },
+  {
+    "id": "a2_u5",
+    "level": "A2",
+    "title": "Superlatives (-est / most)",
+    "explanation": "Use 'the' plus '-est' or 'the most' to show something has the highest degree among three or more things.",
+    "example_correct": "She is the smartest student in the class.",
+    "example_common_mistake": "She is most smart student in the class."
+  },
+  {
+    "id": "a2_u6",
+    "level": "A2",
+    "title": "Countable vs Uncountable Nouns",
+    "explanation": "Use 'many' or 'few' for things you can count (apples). Use 'much' or 'little' for things you cannot count (water, money).",
+    "example_correct": "I don't have much time today.",
+    "example_common_mistake": "I don't have many time today."
+  },
+  {
+    "id": "a2_u7",
+    "level": "A2",
+    "title": "Adverbs of Frequency (Always, Sometimes, Never)",
+    "explanation": "Place frequency words before main verbs, but after the verb 'to be'.",
+    "example_correct": "He is always punctual for meetings.",
+    "example_common_mistake": "He always is punctual for meetings."
+  },
+  {
+    "id": "a2_u8",
+    "level": "A2",
+    "title": "Modals of Obligation (Must, Should, Have to)",
+    "explanation": "Use 'should' for advice, 'have to' for general rules, and 'must' for strong personal necessity.",
+    "example_correct": "You should sleep early before your exam.",
+    "example_common_mistake": "You should to sleep early before your exam."
+  },
+  {
+    "id": "a2_u9",
+    "level": "A2",
+    "title": "First Conditional (Real Future Possibilities)",
+    "explanation": "Use 'if' + present simple for the condition, and 'will' + verb for the future result.",
+    "example_correct": "If it rains tomorrow, I will stay home.",
+    "example_common_mistake": "If it will rain tomorrow, I stay home."
+  },
+  {
+    "id": "b1_u1",
+    "level": "B1",
+    "title": "Present Perfect for Life Experience",
+    "explanation": "Use have/has + past participle to talk about experiences without specifying the exact time in the past.",
+    "example_correct": "I have visited Japan twice.",
+    "example_common_mistake": "I have visit Japan twice in 2020."
+  },
+  {
+    "id": "b1_u2",
+    "level": "B1",
+    "title": "Present Perfect vs Past Simple",
+    "explanation": "Use past simple for specific past times (yesterday). Use present perfect for general experience or unfinished time (this week).",
+    "example_correct": "I saw him yesterday, but I haven't seen him today.",
+    "example_common_mistake": "I have seen him yesterday."
+  },
+  {
+    "id": "b1_u3",
+    "level": "B1",
+    "title": "Past Continuous vs Past Simple",
+    "explanation": "Use past continuous (was/were -ing) for an ongoing background action interrupted by a shorter past simple action.",
+    "example_correct": "I was cooking when the telephone rang.",
+    "example_common_mistake": "I cooked when the telephone was ringing."
+  },
+  {
+    "id": "b1_u4",
+    "level": "B1",
+    "title": "Second Conditional (Hypothetical Situations)",
+    "explanation": "Use 'if' + past simple, followed by 'would' + base verb to talk about imaginary present or future situations.",
+    "example_correct": "If I had more time, I would learn Spanish.",
+    "example_common_mistake": "If I will have more time, I will learn Spanish."
+  },
+  {
+    "id": "b1_u5",
+    "level": "B1",
+    "title": "Reported Speech Basics",
+    "explanation": "When telling someone what another person said, shift present tense verbs into past tense.",
+    "example_correct": "He said that he was busy.",
+    "example_common_mistake": "He said that I am busy."
+  },
+  {
+    "id": "b1_u6",
+    "level": "B1",
+    "title": "Passive Voice in Simple Tenses",
+    "explanation": "Focus on the action or object rather than who performed it by using form of 'be' + past participle.",
+    "example_correct": "The report was submitted by the team.",
+    "example_common_mistake": "The report submitted by the team."
+  },
+  {
+    "id": "b1_u7",
+    "level": "B1",
+    "title": "Relative Clauses (Who, Which, That)",
+    "explanation": "Use 'who' for people and 'which' or 'that' for things to connect two sentences smoothly.",
+    "example_correct": "The manager who hired me is very supportive.",
+    "example_common_mistake": "The manager which hired me is very supportive."
+  },
+  {
+    "id": "b1_u8",
+    "level": "B1",
+    "title": "Gerunds vs Infinitives (Enjoy doing vs Decide to do)",
+    "explanation": "Some verbs are followed by '-ing' (enjoy, avoid), while others take 'to' + base verb (decide, plan).",
+    "example_correct": "I enjoy working on creative projects.",
+    "example_common_mistake": "I enjoy to work on creative projects."
+  },
+  {
+    "id": "b1_u9",
+    "level": "B1",
+    "title": "Used To for Past Habits",
+    "explanation": "Use 'used to' + base verb for states or routines that were true in the past but are no longer true now.",
+    "example_correct": "I used to live in Chicago.",
+    "example_common_mistake": "I was used to live in Chicago."
+  },
+  {
+    "id": "b2_u1",
+    "level": "B2",
+    "title": "Present Perfect Continuous (Duration of Action)",
+    "explanation": "Use have/has been + verb-ing to highlight how long an action has been happening up to the present moment.",
+    "example_correct": "She has been working here for three years.",
+    "example_common_mistake": "She is working here since three years."
+  },
+  {
+    "id": "b2_u2",
+    "level": "B2",
+    "title": "Third Conditional (Past Regrets)",
+    "explanation": "Use 'if' + past perfect, followed by 'would have' + past participle to talk about imaginary past events.",
+    "example_correct": "If I had studied harder, I would have passed the exam.",
+    "example_common_mistake": "If I studied harder, I would pass the exam."
+  },
+  {
+    "id": "b2_u3",
+    "level": "B2",
+    "title": "Modals of Deduction (Must have, Might have, Could have)",
+    "explanation": "Use modal + have + past participle to guess or express certainty about something in the past.",
+    "example_correct": "He must have forgotten about the meeting.",
+    "example_common_mistake": "He must forgot about the meeting."
+  },
+  {
+    "id": "b2_u4",
+    "level": "B2",
+    "title": "Advanced Connectors (However, Nevertheless, Whereas)",
+    "explanation": "Use formal transition words to contrast ideas across professional sentences.",
+    "example_correct": "Sales were low; nevertheless, profits remained high.",
+    "example_common_mistake": "Sales were low whereas profits remained high."
+  },
+  {
+    "id": "b2_u5",
+    "level": "B2",
+    "title": "Passive Voice in Formal & Professional Contexts",
+    "explanation": "Use passive forms with modals or continuous tenses to sound objective in business reports.",
+    "example_correct": "The strategic proposal is being reviewed by the board.",
+    "example_common_mistake": "The strategic proposal is reviewing by the board."
+  },
+  {
+    "id": "b2_u6",
+    "level": "B2",
+    "title": "Phrasal Verbs in Business English",
+    "explanation": "Master common multi-word verbs like 'carry out', 'bring up', or 'look into' in professional speech.",
+    "example_correct": "We will look into the customer issue immediately.",
+    "example_common_mistake": "We will look the customer issue immediately."
+  },
+  {
+    "id": "b2_u7",
+    "level": "B2",
+    "title": "Wish & If Only for Unreal Desires",
+    "explanation": "Use 'wish' + past simple for present desires, or 'wish' + past perfect for past regrets.",
+    "example_correct": "I wish I had double-checked the numbers.",
+    "example_common_mistake": "I wish I check the numbers."
+  },
+  {
+    "id": "b2_u8",
+    "level": "B2",
+    "title": "Participle Clauses for Concise Writing",
+    "explanation": "Combine two clauses into one using '-ing' or '-ed' forms to make your sentences flow smoothly.",
+    "example_correct": "Having finished the report, she sent the email.",
+    "example_common_mistake": "Finished the report, she sent the email."
+  },
+  {
+    "id": "b2_u9",
+    "level": "B2",
+    "title": "Causative Verbs (Have / Get something done)",
+    "explanation": "Use have or get + object + past participle when someone else performs a service for you.",
+    "example_correct": "I had my presentation slides reviewed yesterday.",
+    "example_common_mistake": "I reviewed my presentation slides yesterday by someone."
+  },
+  {
+    "id": "c1_u1",
+    "level": "C1",
+    "title": "Inversion for Emphasis",
+    "explanation": "Place negative words like 'rarely', 'seldom', or 'not only' at the start of a sentence and swap verb and subject for dramatic emphasis.",
+    "example_correct": "Rarely have I seen such dedication.",
+    "example_common_mistake": "Rarely I have seen such dedication."
+  },
+  {
+    "id": "c1_u2",
+    "level": "C1",
+    "title": "Mixed Conditionals",
+    "explanation": "Combine past condition with present result (or vice versa) to express complex hypothetical realities.",
+    "example_correct": "If I had accepted that offer, I would be living in Tokyo today.",
+    "example_common_mistake": "If I accepted that offer, I will live in Tokyo today."
+  },
+  {
+    "id": "c1_u3",
+    "level": "C1",
+    "title": "Subjunctive Mood in Formal Requests",
+    "explanation": "Use the base form of the verb after verbs like demand, insist, or recommend in formal statements.",
+    "example_correct": "The director recommended that he attend the summit.",
+    "example_common_mistake": "The director recommended that he attends the summit."
+  },
+  {
+    "id": "c1_u4",
+    "level": "C1",
+    "title": "Advanced Cleft Sentences (What / It is... that)",
+    "explanation": "Use 'What...' or 'It is...' structure to highlight the exact key point you want your audience to remember.",
+    "example_correct": "What surprised us most was his thorough analysis.",
+    "example_common_mistake": "Which surprised us most was his thorough analysis."
+  },
+  {
+    "id": "c1_u5",
+    "level": "C1",
+    "title": "Complex Nominal Phrases",
+    "explanation": "Pack detailed ideas efficiently into noun phrases for academic or executive communication.",
+    "example_correct": "The unexpected decline in quarterly revenue triggered a audit.",
+    "example_common_mistake": "The revenue declined unexpectedly in quarterly triggered a audit."
+  },
+  {
+    "id": "c1_u6",
+    "level": "C1",
+    "title": "Ellipsis & Substitution",
+    "explanation": "Omit repeated words smoothly to create concise, sophisticated conversational flow.",
+    "example_correct": "She promised to complete the project, and did so by Friday.",
+    "example_common_mistake": "She promised to complete the project, and completed the project by Friday."
+  },
+  {
+    "id": "c1_u7",
+    "level": "C1",
+    "title": "Advanced Hedging & Diplomatic Tone",
+    "explanation": "Use cautious language like 'it would appear that' or 'tend to' to discuss sensitive topics professionally.",
+    "example_correct": "It would seem that the initial estimates were slightly optimistic.",
+    "example_common_mistake": "The initial estimates were completely wrong."
+  },
+  {
+    "id": "c1_u8",
+    "level": "C1",
+    "title": "Discourse Markers for Professional Debates",
+    "explanation": "Use advanced transition phrases like 'be that as it may' or 'to put it another way' in meetings.",
+    "example_correct": "Be that as it may, we must remain focused on quality.",
+    "example_common_mistake": "Be that like it is, we must remain focused on quality."
+  },
+  {
+    "id": "c1_u9",
+    "level": "C1",
+    "title": "Mastery of Complex Phrasal Prepositional Verbs",
+    "explanation": "Use three-word phrasal verbs smoothly (e.g., 'come up against', 'cut back on', 'look forward to').",
+    "example_correct": "We must cut back on unnecessary operational expenses.",
+    "example_common_mistake": "We must cut back of unnecessary operational expenses."
+  }
+]

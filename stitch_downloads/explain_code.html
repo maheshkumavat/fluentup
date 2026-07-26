@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Explain My Code - FluentUp</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#fffbff",
+                        "on-secondary-fixed-variant": "#474746",
+                        "surface": "#faf9f9",
+                        "surface-tint": "#1a57c8",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#fffcff",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#303031",
+                        "on-tertiary-fixed-variant": "#743500",
+                        "tertiary-fixed-dim": "#ffb689",
+                        "secondary": "#5f5e5e",
+                        "surface-bright": "#faf9f9",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed": "#001847",
+                        "on-surface-variant": "#434653",
+                        "surface-container": "#efeded",
+                        "background": "#faf9f9",
+                        "tertiary": "#944600",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#ffdbc8",
+                        "on-surface": "#1b1c1c",
+                        "primary-container": "#3b6fe0",
+                        "secondary-fixed": "#e5e2e1",
+                        "primary-fixed": "#dae2ff",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#0040a1",
+                        "surface-dim": "#dbdad9",
+                        "surface-container-highest": "#e3e2e2",
+                        "surface-variant": "#e3e2e2",
+                        "primary": "#1555c6",
+                        "secondary-container": "#e2dfde",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "surface-container-high": "#e9e8e8",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed-dim": "#b2c5ff",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-primary": "#b2c5ff",
+                        "on-background": "#1b1c1c",
+                        "outline": "#737785",
+                        "outline-variant": "#c3c6d6",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#f2f0f0",
+                        "surface-container-low": "#f5f3f3",
+                        "tertiary-container": "#ba5900",
+                        "on-secondary-container": "#636262",
+                        "on-tertiary-fixed": "#321300"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "section-gap": "32px",
+                        "hairline-weight": "1px",
+                        "element-gap": "16px",
+                        "stack-sm": "8px",
+                        "container-padding": "20px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "mono-md": ["JetBrains Mono"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "mono-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #FDFDFB;
+            color: #1b1c1c;
+            -webkit-font-smoothing: antialiased;
+        }
+        .code-editor-bg {
+            background-color: #F5F5F5;
+        }
+        .line-number-blue {
+            color: #3B6FE0;
+            opacity: 0.6;
+        }
+        .recording-pulse {
+            animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.5; }
+            50% { transform: scale(1.05); opacity: 0.3; }
+            100% { transform: scale(0.95); opacity: 0.5; }
+        }
+        .editorial-border-b {
+            border-bottom: 1px solid #E5E5E5;
+        }
+        .editorial-border-t {
+            border-top: 1px solid #E5E5E5;
+        }
+        /* Hide scrollbars for a cleaner printed look */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface border-b border-outline-variant flex justify-between items-center px-container-padding h-16 w-full fixed top-0 z-50">
+<div class="flex items-center gap-stack-sm">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed" data-icon="language">language</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">FluentUp</h1>
+</div>
+<button class="hover:opacity-80 transition-opacity duration-200 text-secondary">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</header>
+<main class="flex-1 pt-16 pb-24 px-container-padding">
+<!-- Introduction Header -->
+<section class="py-6">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-2">Code Explainer</h2>
+<p class="font-body-md text-body-md text-secondary">Paste your snippet and record your question to receive a linguistic breakdown.</p>
+</section>
+<!-- Code Editor Section -->
+<section class="mb-section-gap">
+<div class="code-editor-bg rounded-lg overflow-hidden border border-outline-variant flex font-mono-md text-mono-md min-h-[200px]">
+<!-- Line Numbers -->
+<div class="py-4 px-3 flex flex-col text-right select-none line-number-blue border-r border-outline-variant bg-surface-container-low">
+<span>1</span>
+<span>2</span>
+<span>3</span>
+<span>4</span>
+<span>5</span>
+<span>6</span>
+</div>
+<!-- Input Area -->
+<textarea class="w-full p-4 bg-transparent border-none focus:ring-0 resize-none text-on-surface-variant no-scrollbar" placeholder="// Paste your code here..." spellcheck="false">function greeting(name) {
+  return `Hello, ${name}!`;
+}
+
+console.log(greeting('World'));</textarea>
+</div>
+</section>
+<!-- Recording Controls -->
+<section class="flex flex-col items-center justify-center gap-element-gap mb-section-gap">
+<div class="relative group">
+<div class="absolute inset-0 rounded-full bg-primary-container opacity-0 transition-opacity duration-300" id="recording-glow"></div>
+<button class="relative z-10 w-20 h-20 rounded-full border-2 border-primary-container flex items-center justify-center transition-all duration-300 active:scale-90" id="record-btn" onclick="toggleRecording()">
+<span class="material-symbols-outlined text-primary-container text-4xl" data-icon="mic" id="mic-icon">mic</span>
+</button>
+</div>
+<div class="text-center">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-widest" id="record-status">Tap to Record Question</span>
+</div>
+</section>
+<!-- Feedback / Analysis Section -->
+<section class="editorial-border-t pt-section-gap space-y-8">
+<div class="space-y-stack-sm">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest">Intent Analysis</span>
+<div class="editorial-border-b pb-4">
+<p class="font-body-md text-body-md text-on-surface">The function defines a standard greeting protocol using template literals, which is a modern ECMAScript feature for string interpolation.</p>
+</div>
+</div>
+<div class="space-y-stack-sm">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest">Vocabulary Focus</span>
+<div class="editorial-border-b pb-4 flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-surface-container-highest text-secondary font-label-sm text-label-sm rounded-lg">Interpolation</span>
+<span class="px-2 py-1 bg-surface-container-highest text-secondary font-label-sm text-label-sm rounded-lg">Declaration</span>
+<span class="px-2 py-1 bg-surface-container-highest text-secondary font-label-sm text-label-sm rounded-lg">Argument</span>
+</div>
+</div>
+<div class="space-y-stack-sm">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest">Tutor Suggestion</span>
+<div class="editorial-border-b pb-4">
+<p class="font-body-md text-body-md text-on-surface">Try explaining how you would handle an empty name string. This would help you practice conditional logic in your target language.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center py-stack-sm bg-surface border-t border-outline-variant">
+<a class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant hover:text-primary-container scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+<span class="font-label-sm text-label-sm">Chat</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant hover:text-primary-container scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-label-sm text-label-sm">Grammar</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed hover:text-primary-container scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="theater_comedy">theater_comedy</span>
+<span class="font-label-sm text-label-sm">Roleplay</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant hover:text-primary-container scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="style">style</span>
+<span class="font-label-sm text-label-sm">Vocabulary</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant hover:text-primary-container scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<script>
+        let isRecording = false;
+        const recordBtn = document.getElementById('record-btn');
+        const micIcon = document.getElementById('mic-icon');
+        const statusText = document.getElementById('record-status');
+        const glow = document.getElementById('recording-glow');
+
+        function toggleRecording() {
+            isRecording = !isRecording;
+            
+            if (isRecording) {
+                recordBtn.classList.add('bg-primary-container', 'recording-pulse');
+                micIcon.classList.remove('text-primary-container');
+                micIcon.classList.add('text-on-primary');
+                statusText.innerText = 'Recording...';
+                statusText.classList.add('text-primary');
+                glow.classList.remove('opacity-0');
+                glow.classList.add('opacity-20');
+            } else {
+                recordBtn.classList.remove('bg-primary-container', 'recording-pulse');
+                micIcon.classList.add('text-primary-container');
+                micIcon.classList.remove('text-on-primary');
+                statusText.innerText = 'Tap to Record Question';
+                statusText.classList.remove('text-primary');
+                glow.classList.add('opacity-0');
+                glow.classList.remove('opacity-20');
+            }
+        }
+    </script>
+</body></html>

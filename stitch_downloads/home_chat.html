@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        /* Custom scrollbar for editorial look */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #faf9f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e5e2e1;
+            border-radius: 2px;
+        }
+        body {
+            background-color: #fdfdfb;
+            color: #1b1c1c;
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-container": "#fffbff",
+                      "on-secondary-fixed-variant": "#474746",
+                      "surface": "#faf9f9",
+                      "surface-tint": "#1a57c8",
+                      "error": "#ba1a1a",
+                      "on-primary-container": "#fffcff",
+                      "secondary-fixed-dim": "#c8c6c5",
+                      "error-container": "#ffdad6",
+                      "inverse-surface": "#303031",
+                      "on-tertiary-fixed-variant": "#743500",
+                      "tertiary-fixed-dim": "#ffb689",
+                      "secondary": "#5f5e5e",
+                      "surface-bright": "#faf9f9",
+                      "on-error": "#ffffff",
+                      "on-primary-fixed": "#001847",
+                      "on-surface-variant": "#434653",
+                      "surface-container": "#efeded",
+                      "background": "#faf9f9",
+                      "tertiary": "#944600",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed": "#ffdbc8",
+                      "on-surface": "#1b1c1c",
+                      "primary-container": "#3b6fe0",
+                      "secondary-fixed": "#e5e2e1",
+                      "primary-fixed": "#dae2ff",
+                      "on-primary": "#ffffff",
+                      "on-primary-fixed-variant": "#0040a1",
+                      "surface-dim": "#dbdad9",
+                      "surface-container-highest": "#e3e2e2",
+                      "surface-variant": "#e3e2e2",
+                      "primary": "#1555c6",
+                      "secondary-container": "#e2dfde",
+                      "on-secondary-fixed": "#1c1b1b",
+                      "surface-container-high": "#e9e8e8",
+                      "on-secondary": "#ffffff",
+                      "primary-fixed-dim": "#b2c5ff",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-primary": "#b2c5ff",
+                      "on-background": "#1b1c1c",
+                      "outline": "#737785",
+                      "outline-variant": "#c3c6d6",
+                      "on-tertiary": "#ffffff",
+                      "inverse-on-surface": "#f2f0f0",
+                      "surface-container-low": "#f5f3f3",
+                      "tertiary-container": "#ba5900",
+                      "on-secondary-container": "#636262",
+                      "on-tertiary-fixed": "#321300"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "section-gap": "32px",
+                      "hairline-weight": "1px",
+                      "element-gap": "16px",
+                      "stack-sm": "8px",
+                      "container-padding": "20px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Inter"],
+                      "mono-md": ["JetBrains Mono"],
+                      "headline-lg-mobile": ["Inter"],
+                      "body-md": ["Inter"],
+                      "label-md": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "label-sm": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "mono-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-container-lowest min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-container-padding h-16 w-full fixed top-0 bg-surface z-50 border-b border-outline-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="language">language</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">FluentUp</h1>
+</div>
+<button class="hover:opacity-80 transition-opacity duration-200">
+<span class="material-symbols-outlined text-secondary" data-icon="settings">settings</span>
+</button>
+</header>
+<!-- Chat Canvas -->
+<main class="flex-1 mt-16 mb-32 px-container-padding py-section-gap overflow-y-auto max-w-2xl mx-auto w-full space-y-10">
+<!-- Date Marker -->
+<div class="flex justify-center">
+<span class="font-label-sm text-label-sm text-outline px-4 py-1 bg-surface-container-low rounded-full">Today</span>
+</div>
+<!-- AI Message -->
+<div class="flex flex-col items-start max-w-[85%] animate-in fade-in slide-in-from-left duration-500">
+<div class="flex items-center gap-2 mb-2">
+<span class="font-label-sm text-label-sm text-primary font-bold">Tutor</span>
+<span class="font-label-sm text-label-sm text-outline">10:02 AM</span>
+</div>
+<div class="pl-4 border-l-2 border-primary-container">
+<p class="font-body-md text-body-md text-[#1A1A1A] leading-relaxed">
+                    Bonjour ! I noticed you've been practicing your past tense. Ready to try a roleplay about your last vacation?
+                </p>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex flex-col items-end w-full animate-in fade-in slide-in-from-right duration-500">
+<div class="flex items-center gap-2 mb-2">
+<span class="font-label-sm text-label-sm text-outline">10:03 AM</span>
+<span class="font-label-sm text-label-sm text-secondary font-bold">You</span>
+</div>
+<div class="max-w-[80%] pr-4">
+<p class="font-body-md text-body-md text-[#1A1A1A] text-right leading-relaxed">
+                    Yes, I'd love to. Last summer I went to Marseille.
+                </p>
+</div>
+</div>
+<!-- AI Message -->
+<div class="flex flex-col items-start max-w-[85%] animate-in fade-in slide-in-from-left duration-500 delay-150">
+<div class="flex items-center gap-2 mb-2">
+<span class="font-label-sm text-label-sm text-primary font-bold">Tutor</span>
+<span class="font-label-sm text-label-sm text-outline">10:03 AM</span>
+</div>
+<div class="pl-4 border-l-2 border-primary-container">
+<p class="font-body-md text-body-md text-[#1A1A1A] leading-relaxed">
+                    Excellent choice. Marseille is beautiful. Can you describe your first day there using the <span class="font-mono-md text-mono-md bg-secondary-container px-1 rounded">passé composé</span>?
+                </p>
+</div>
+<!-- Grammar Tip Chip -->
+<div class="mt-4 p-4 border border-outline-variant rounded-lg bg-surface-container-low flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-body-md" data-icon="lightbulb">lightbulb</span>
+<div>
+<span class="font-label-sm text-label-sm text-secondary block mb-1">Quick Tip</span>
+<p class="font-label-sm text-label-sm text-on-surface">Remember to use 'être' as the auxiliary verb for 'aller'.</p>
+</div>
+</div>
+</div>
+<!-- User Message (Current Draft/Thinking State) -->
+<div class="flex flex-col items-end w-full opacity-60">
+<div class="max-w-[80%] pr-4">
+<p class="font-body-md text-body-md text-[#1A1A1A] text-right italic leading-relaxed">
+                    Je suis allé à la plage...
+                </p>
+</div>
+</div>
+</main>
+<!-- Floating Input Area -->
+<div class="fixed bottom-16 left-0 w-full px-container-padding py-4 bg-surface z-40">
+<div class="relative max-w-2xl mx-auto flex items-center">
+<button class="absolute left-4 text-primary-container hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="mic">mic</span>
+</button>
+<input class="w-full h-14 pl-12 pr-12 rounded-full border border-outline-variant bg-surface-container-lowest focus:outline-none focus:border-primary-container transition-colors font-body-md text-body-md text-on-surface" placeholder="Type your response..." type="text"/>
+<button class="absolute right-4 text-primary-container hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+</button>
+</div>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center py-stack-sm bg-surface border-t border-outline-variant h-16">
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="chat" style="font-variation-settings: 'FILL' 1;">chat</span>
+<span class="font-label-sm text-label-sm">Chat</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant scale-95 active:scale-90 transition-transform hover:text-primary-container" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-label-sm text-label-sm">Grammar</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant scale-95 active:scale-90 transition-transform hover:text-primary-container" href="#">
+<span class="material-symbols-outlined" data-icon="theater_comedy">theater_comedy</span>
+<span class="font-label-sm text-label-sm">Roleplay</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant scale-95 active:scale-90 transition-transform hover:text-primary-container" href="#">
+<span class="material-symbols-outlined" data-icon="style">style</span>
+<span class="font-label-sm text-label-sm">Vocabulary</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant scale-95 active:scale-90 transition-transform hover:text-primary-container" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<!-- Script for subtle interactions -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const input = document.querySelector('input');
+            const sendBtn = document.querySelector('[data-icon="send"]').parentElement;
+
+            input.addEventListener('focus', () => {
+                // Potential for smooth keyboard shift logic
+            });
+
+            sendBtn.addEventListener('click', () => {
+                if (input.value.trim() !== '') {
+                    // Logic to append user message and clear input
+                    input.value = '';
+                }
+            });
+        });
+    </script>
+</body></html>

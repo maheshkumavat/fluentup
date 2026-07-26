@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FluentUp - Scenarios</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+            font-size: 32px;
+        }
+        body {
+            background-color: #FDFDFB;
+            -webkit-font-smoothing: antialiased;
+        }
+        /* Custom scrollbar for a clean editorial look */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FDFDFB;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #E5E5E5;
+            border-radius: 2px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-container": "#fffbff",
+                      "on-secondary-fixed-variant": "#474746",
+                      "surface": "#faf9f9",
+                      "surface-tint": "#1a57c8",
+                      "error": "#ba1a1a",
+                      "on-primary-container": "#fffcff",
+                      "secondary-fixed-dim": "#c8c6c5",
+                      "error-container": "#ffdad6",
+                      "inverse-surface": "#303031",
+                      "on-tertiary-fixed-variant": "#743500",
+                      "tertiary-fixed-dim": "#ffb689",
+                      "secondary": "#5f5e5e",
+                      "surface-bright": "#faf9f9",
+                      "on-error": "#ffffff",
+                      "on-primary-fixed": "#001847",
+                      "on-surface-variant": "#434653",
+                      "surface-container": "#efeded",
+                      "background": "#faf9f9",
+                      "tertiary": "#944600",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed": "#ffdbc8",
+                      "on-surface": "#1b1c1c",
+                      "primary-container": "#3b6fe0",
+                      "secondary-fixed": "#e5e2e1",
+                      "primary-fixed": "#dae2ff",
+                      "on-primary": "#ffffff",
+                      "on-primary-fixed-variant": "#0040a1",
+                      "surface-dim": "#dbdad9",
+                      "surface-container-highest": "#e3e2e2",
+                      "surface-variant": "#e3e2e2",
+                      "primary": "#1555c6",
+                      "secondary-container": "#e2dfde",
+                      "on-secondary-fixed": "#1c1b1b",
+                      "surface-container-high": "#e9e8e8",
+                      "on-secondary": "#ffffff",
+                      "primary-fixed-dim": "#b2c5ff",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-primary": "#b2c5ff",
+                      "on-background": "#1b1c1c",
+                      "outline": "#737785",
+                      "outline-variant": "#c3c6d6",
+                      "on-tertiary": "#ffffff",
+                      "inverse-on-surface": "#f2f0f0",
+                      "surface-container-low": "#f5f3f3",
+                      "tertiary-container": "#ba5900",
+                      "on-secondary-container": "#636262",
+                      "on-tertiary-fixed": "#321300"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "section-gap": "32px",
+                      "hairline-weight": "1px",
+                      "element-gap": "16px",
+                      "stack-sm": "8px",
+                      "container-padding": "20px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Inter"],
+                      "mono-md": ["JetBrains Mono"],
+                      "headline-lg-mobile": ["Inter"],
+                      "body-md": ["Inter"],
+                      "label-md": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "label-sm": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "mono-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col font-body-md">
+<!-- Top AppBar -->
+<header class="flex justify-between items-center px-container-padding h-16 w-full bg-surface border-b border-outline-variant transition-opacity duration-200 sticky top-0 z-50">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="language">language</span>
+<span class="font-headline-md text-headline-md font-bold text-primary">FluentUp</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-secondary" data-icon="settings">settings</span>
+</button>
+</div>
+</header>
+<main class="flex-grow pb-24">
+<!-- Hero Title Section -->
+<section class="px-container-padding pt-8 pb-4">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-2">Scenarios</h1>
+<p class="font-body-md text-body-md text-secondary leading-relaxed">Choose a context to practice your natural fluency through interactive roleplay.</p>
+</section>
+<!-- Bento/Grid Layout for Scenarios -->
+<section class="px-container-padding grid grid-cols-2 gap-4">
+<!-- Professional Scenario -->
+<div class="group cursor-pointer border border-outline-variant bg-surface-container-lowest p-6 flex flex-col items-center justify-center text-center aspect-square transition-all duration-300 hover:border-primary-container active:scale-95">
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors mb-4" data-icon="briefcase">video_file</span>
+<span class="font-label-md text-label-md text-on-surface">Job Interview</span>
+</div>
+<!-- Social Scenario -->
+<div class="group cursor-pointer border border-outline-variant bg-surface-container-lowest p-6 flex flex-col items-center justify-center text-center aspect-square transition-all duration-300 hover:border-primary-container active:scale-95">
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors mb-4" data-icon="people">people</span>
+<span class="font-label-md text-label-md text-on-surface">Coffee Chat</span>
+</div>
+<!-- Explain My Code Scenario (Priority Requirement) -->
+<div class="group cursor-pointer border border-outline-variant bg-surface-container-lowest p-6 flex flex-col items-center justify-center text-center aspect-square transition-all duration-300 hover:border-primary-container active:scale-95">
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors mb-4" data-icon="code">code</span>
+<span class="font-label-md text-label-md text-on-surface">Explain My Code</span>
+</div>
+<!-- Travel Scenario -->
+<div class="group cursor-pointer border border-outline-variant bg-surface-container-lowest p-6 flex flex-col items-center justify-center text-center aspect-square transition-all duration-300 hover:border-primary-container active:scale-95">
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors mb-4" data-icon="fork_left">fork_left</span>
+<span class="font-label-md text-label-md text-on-surface">Ordering Food</span>
+</div>
+<!-- Daily Life Scenario -->
+<div class="group cursor-pointer border border-outline-variant bg-surface-container-lowest p-6 flex flex-col items-center justify-center text-center aspect-square transition-all duration-300 hover:border-primary-container active:scale-95">
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors mb-4" data-icon="chat_bubble">chat_bubble</span>
+<span class="font-label-md text-label-md text-on-surface">Small Talk</span>
+</div>
+<!-- Presentation Scenario -->
+<div class="group cursor-pointer border border-outline-variant bg-surface-container-lowest p-6 flex flex-col items-center justify-center text-center aspect-square transition-all duration-300 hover:border-primary-container active:scale-95">
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors mb-4" data-icon="co_present">co_present</span>
+<span class="font-label-md text-label-md text-on-surface">Pitching Ideas</span>
+</div>
+</section>
+<!-- Educational Text Block (Editorial Style) -->
+<div class="mt-12 px-container-padding border-t border-outline-variant pt-8">
+<h2 class="font-headline-md text-headline-md mb-4">Master Technical Dialogue</h2>
+<div class="space-y-4 font-body-md text-body-md text-secondary leading-relaxed">
+<p>Fluency isn't just about grammar; it's about context. Our AI-driven scenarios adapt to your industry-specific vocabulary, helping you communicate complex ideas with precision.</p>
+<div class="relative w-full h-48 overflow-hidden rounded-lg">
+<div class="absolute inset-0 bg-primary/10 flex items-center justify-center">
+
+<span class="font-mono-md text-mono-md text-primary font-bold z-10 p-4 border border-primary/20 bg-surface/80 backdrop-blur-sm">System Ready for Roleplay</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<!-- Using exact structure and styles from Shared Components JSON -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center py-stack-sm bg-surface border-t border-outline-variant">
+<!-- Chat -->
+<button class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant hover:text-primary-container scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+<span class="font-label-sm text-label-sm">Chat</span>
+</button>
+<!-- Grammar -->
+<button class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant hover:text-primary-container scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-label-sm text-label-sm">Grammar</span>
+</button>
+<!-- Roleplay (Active State) -->
+<button class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed hover:text-primary-container scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="theater_comedy" style="font-variation-settings: 'FILL' 1;">theater_comedy</span>
+<span class="font-label-sm text-label-sm">Roleplay</span>
+</button>
+<!-- Vocabulary -->
+<button class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant hover:text-primary-container scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="style">style</span>
+<span class="font-label-sm text-label-sm">Vocabulary</span>
+</button>
+<!-- Profile -->
+<button class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant hover:text-primary-container scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</button>
+</nav>
+<script>
+        // Micro-interaction for scenario cards
+        document.querySelectorAll('.group').forEach(card => {
+            card.addEventListener('click', () => {
+                const label = card.querySelector('span:last-child').innerText;
+                console.log(`Navigating to scenario: ${label}`);
+                // Visual feedback
+                card.style.borderColor = '#1555c6';
+                setTimeout(() => {
+                    card.style.borderColor = '#c3c6d6';
+                }, 400);
+            });
+        });
+
+        // Atmospheric touch: slight movement on the header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('shadow-sm');
+                header.style.backgroundColor = '#ffffff';
+            } else {
+                header.classList.remove('shadow-sm');
+                header.style.backgroundColor = '#faf9f9';
+            }
+        });
+    </script>
+</body></html>

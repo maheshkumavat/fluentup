@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FluentUp - Onboarding</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#fffbff",
+                        "on-secondary-fixed-variant": "#474746",
+                        "surface": "#faf9f9",
+                        "surface-tint": "#1a57c8",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#fffcff",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#303031",
+                        "on-tertiary-fixed-variant": "#743500",
+                        "tertiary-fixed-dim": "#ffb689",
+                        "secondary": "#5f5e5e",
+                        "surface-bright": "#faf9f9",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed": "#001847",
+                        "on-surface-variant": "#434653",
+                        "surface-container": "#efeded",
+                        "background": "#faf9f9",
+                        "tertiary": "#944600",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#ffdbc8",
+                        "on-surface": "#1b1c1c",
+                        "primary-container": "#3b6fe0",
+                        "secondary-fixed": "#e5e2e1",
+                        "primary-fixed": "#dae2ff",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#0040a1",
+                        "surface-dim": "#dbdad9",
+                        "surface-container-highest": "#e3e2e2",
+                        "surface-variant": "#e3e2e2",
+                        "primary": "#1555c6",
+                        "secondary-container": "#e2dfde",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "surface-container-high": "#e9e8e8",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed-dim": "#b2c5ff",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-primary": "#b2c5ff",
+                        "on-background": "#1b1c1c",
+                        "outline": "#737785",
+                        "outline-variant": "#c3c6d6",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#f2f0f0",
+                        "surface-container-low": "#f5f3f3",
+                        "tertiary-container": "#ba5900",
+                        "on-secondary-container": "#636262",
+                        "on-tertiary-fixed": "#321300"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "section-gap": "32px",
+                        "hairline-weight": "1px",
+                        "element-gap": "16px",
+                        "stack-sm": "8px",
+                        "container-padding": "20px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "mono-md": ["JetBrains Mono"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "mono-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #FDFDFB;
+            font-family: 'Inter', sans-serif;
+            color: #1b1c1c;
+            overflow: hidden;
+        }
+        .snap-x {
+            scroll-snap-type: x mandatory;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .snap-x::-webkit-scrollbar {
+            display: none;
+        }
+        .snap-center {
+            scroll-snap-align: center;
+        }
+        .editorial-hairline {
+            border-bottom: 1px solid #E5E5E5;
+        }
+        .onboarding-image {
+            filter: grayscale(1);
+            mix-blend-mode: multiply;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex flex-col h-screen max-w-md mx-auto relative">
+<!-- Header Section -->
+<header class="flex justify-between items-center px-container-padding h-16 w-full fixed top-0 z-10 bg-[#FDFDFB]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="language">language</span>
+<span class="font-headline-md text-headline-md font-bold text-primary">FluentUp</span>
+</div>
+<button class="font-label-md text-label-md text-secondary hover:opacity-80 transition-opacity">Skip</button>
+</header>
+<!-- Slides Container -->
+<main class="flex-1 overflow-x-auto snap-x flex h-full" id="slider">
+<!-- Slide 1: Speak with Confidence -->
+<section class="min-w-full h-full snap-center flex flex-col pt-24 pb-32 px-container-padding">
+<div class="flex-1 flex flex-col justify-center items-center text-center">
+<div class="w-full aspect-square mb-12 flex items-center justify-center bg-surface-container rounded-xl overflow-hidden">
+<img class="onboarding-image w-4/5 h-4/5 object-contain" data-alt="A clean, minimalist line-art illustration of a young adult student wearing headphones and speaking clearly. The art style is refined and scholarly, featuring elegant thin black strokes on a soft off-white background. No colors except for a single subtle blue accent on the headphones. The composition is centered, professional, and captures a quiet, focused academic atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEUlHY4-ma2HPQvNSYA5rSHr0W2icq0GXUemB8LA7xenXEfIALrygzFgjJQh7O62eWUcP7PwcqrFhbRq6AWmNwFtFfbS_O-6vsbPi8bvTAXHFDdjdYCQvCGSeF3-NgpUXY3iiXR1_iUXD7_y-pNjQlr4Cku__6QEN6ySJ4oGubsaxBTddDkog9OT36n2c6eJkcPtXlXhjma2IVLn9pHk1Tyv4FGema5LXSSS33Q7TrRkv8md--f_CEmCZVjv3QphxNUGYZS5mHXvfp"/>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile mb-stack-sm">Speak with Confidence</h1>
+<p class="font-body-md text-body-md text-secondary max-w-[280px]">Practice English in a safe, quiet space.</p>
+</div>
+</section>
+<!-- Slide 2: Master Grammar -->
+<section class="min-w-full h-full snap-center flex flex-col pt-24 pb-32 px-container-padding border-l border-outline-variant">
+<div class="flex-1 flex flex-col justify-center items-center text-center">
+<div class="w-full aspect-square mb-12 flex items-center justify-center bg-surface-container rounded-xl overflow-hidden">
+<img class="onboarding-image w-4/5 h-4/5 object-contain" data-alt="A sophisticated editorial-style line drawing of an open textbook with clear grammatical diagrams and a floating pencil. The aesthetic is clean and academic, utilizing crisp black lines on a cream-colored paper-like background. The image evokes the clarity of a modern high-end dictionary or scholarly publication. Minimalist and high-contrast, perfectly suited for a focused learning environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUyvQywTvevb8FpHhnDGDR5pwsnDFvZZkmQ2QJTTUC1QJai4fKmcFQapJBFJH2DUoPfswkYpwiq7wrBkl4BX2J2CKUQdFi5-da_iQzCf5lo6bhjpKLvTf71Dh_qQx9ZwHBk5uUHRzXCja7uxYF9__KRGqzTQ9J-E7EbYWvKRbwXgSMt7GIfBk4pmfGiiWqTZU1qnBzG1eNItjt9w54nGxAfG7LRE75YDzvqIv26qVMs3mmonHhazwftxFlpnccA8o4k1XYGzbTVZqf"/>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile mb-stack-sm">Master Grammar</h1>
+<p class="font-body-md text-body-md text-secondary max-w-[280px]">Get real-time feedback on your structure.</p>
+</div>
+</section>
+<!-- Slide 3: Real Scenarios -->
+<section class="min-w-full h-full snap-center flex flex-col pt-24 pb-32 px-container-padding border-l border-outline-variant">
+<div class="flex-1 flex flex-col justify-center items-center text-center">
+<div class="w-full aspect-square mb-12 flex items-center justify-center bg-surface-container rounded-xl overflow-hidden">
+<img class="onboarding-image w-4/5 h-4/5 object-contain" data-alt="A professional line-art illustration depicting two silhouettes in a casual conversational pose across a small cafe table. The drawing style is contemporary and digital-editorial, featuring thin precise lines and significant negative space. The mood is social yet intellectual, representing a roleplay scenario in a modern urban environment. The background is a flat, clean neutral color consistent with a premium educational application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuABs3npmYNAVHq_A_uD3HYzCE-UfNohPCXT_6j8jlK0jQajpj2aFmf5wGGiwo9792B0b7QhcMigi6k62nA9MzQ4jJ09edubj0RycdNI_pt--PRFUvIg4m97pHuvp_cGKQ4nq8d-NuOKiE-cSdCuWE5k2Rk_UubQ_nTjg6kfH6Q-b1MWRU8D8j5cuoumB9bw8gRm14AQ7DcfUQRvbeBRKNI4bEZG17CgDtm64cTN0xKlg2o8suCkOFPY14EAi2iYdgEdF-qVtKvTLLsO"/>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile mb-stack-sm">Real Scenarios</h1>
+<p class="font-body-md text-body-md text-secondary max-w-[280px]">Roleplay anything from interviews to casual coffee talks.</p>
+</div>
+</section>
+</main>
+<!-- Footer Controls -->
+<footer class="fixed bottom-0 left-0 right-0 max-w-md mx-auto px-container-padding py-8 bg-[#FDFDFB]">
+<div class="flex flex-col items-center gap-8">
+<!-- Dot Pagination -->
+<div class="flex gap-2" id="pagination">
+<div class="dot w-2 h-2 rounded-full bg-primary transition-all duration-300" data-slide="0"></div>
+<div class="dot w-2 h-2 rounded-full bg-outline-variant transition-all duration-300" data-slide="1"></div>
+<div class="dot w-2 h-2 rounded-full bg-outline-variant transition-all duration-300" data-slide="2"></div>
+</div>
+<!-- Action Button -->
+<div class="w-full h-14 relative overflow-hidden">
+<button class="w-full h-full bg-primary-container text-on-primary rounded-lg font-label-md text-label-md flex items-center justify-center transition-transform active:scale-95" id="next-btn">
+                    Next
+                </button>
+<button class="absolute inset-0 w-full h-full bg-primary-container text-on-primary rounded-lg font-label-md text-label-md flex items-center justify-center opacity-0 pointer-events-none transform translate-y-full transition-all duration-300" id="start-btn">
+                    Get Started
+                </button>
+</div>
+</div>
+</footer>
+<script>
+        const slider = document.getElementById('slider');
+        const dots = document.querySelectorAll('.dot');
+        const nextBtn = document.getElementById('next-btn');
+        const startBtn = document.getElementById('start-btn');
+        let currentSlide = 0;
+
+        const updateUI = (index) => {
+            currentSlide = index;
+            
+            // Update dots
+            dots.forEach((dot, i) => {
+                if(i === index) {
+                    dot.classList.remove('bg-outline-variant');
+                    dot.classList.add('bg-primary', 'w-4');
+                } else {
+                    dot.classList.add('bg-outline-variant');
+                    dot.classList.remove('bg-primary', 'w-4');
+                }
+            });
+
+            // Toggle Buttons on last slide
+            if (index === 2) {
+                nextBtn.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-100%]');
+                startBtn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-full');
+            } else {
+                nextBtn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-100%]');
+                startBtn.classList.add('opacity-0', 'pointer-events-none', 'translate-y-full');
+            }
+        };
+
+        slider.addEventListener('scroll', () => {
+            const index = Math.round(slider.scrollLeft / slider.clientWidth);
+            if (index !== currentSlide) {
+                updateUI(index);
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentSlide < 2) {
+                slider.scrollTo({
+                    left: (currentSlide + 1) * slider.clientWidth,
+                    behavior: 'smooth'
+                });
+            }
+        });
+
+        // Initialize first state
+        updateUI(0);
+
+        // Simple haptic-like feedback on interactions
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(btn => {
+            btn.addEventListener('touchstart', () => {
+                if (window.navigator.vibrate) window.navigator.vibrate(10);
+            });
+        });
+    </script>
+</body></html>

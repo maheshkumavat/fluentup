@@ -1,0 +1,229 @@
+[
+  {
+    "id": "dl_1",
+    "category": "Daily Life",
+    "title": "My Daily Routine",
+    "description": "Walk through your typical morning and evening habits in English.",
+    "icon": "schedule",
+    "initialGreeting": "Hello! I'd love to hear about your daily routine. How does your morning usually start?"
+  },
+  {
+    "id": "dl_2",
+    "category": "Daily Life",
+    "title": "Hobbies & Free Time",
+    "description": "Discuss your favorite weekend activities, games, or creative pursuits.",
+    "icon": "palette",
+    "initialGreeting": "What do you enjoy doing when you finally get some free time during the week or weekends?"
+  },
+  {
+    "id": "dl_3",
+    "category": "Daily Life",
+    "title": "Favorite Vacation Spot",
+    "description": "Describe a memorable trip or a dream destination you want to visit.",
+    "icon": "flight_takeoff",
+    "initialGreeting": "Traveling is always exciting! What's the most memorable trip you've ever taken?"
+  },
+  {
+    "id": "dl_4",
+    "category": "Daily Life",
+    "title": "Food & Cooking",
+    "description": "Talk about your favorite cuisines, local dishes, or cooking experiences.",
+    "icon": "restaurant",
+    "initialGreeting": "Let's talk about food! What is your favorite dish or cuisine to eat when eating out?"
+  },
+  {
+    "id": "dl_5",
+    "category": "Daily Life",
+    "title": "Movies & Entertainment",
+    "description": "Recommend a movie, TV series, or book you recently enjoyed.",
+    "icon": "movie",
+    "initialGreeting": "Have you watched any great movies or shows recently? Tell me what it was about!"
+  },
+  {
+    "id": "dl_6",
+    "category": "Daily Life",
+    "title": "Fitness & Health",
+    "description": "Share how you stay active, exercise, or maintain healthy daily habits.",
+    "icon": "fitness_center",
+    "initialGreeting": "Staying fit and healthy is key. What kind of exercise or daily activity do you prefer?"
+  },
+  {
+    "id": "dl_7",
+    "category": "Daily Life",
+    "title": "Technology in Daily Life",
+    "description": "Discuss the gadget or app you use most often every single day.",
+    "icon": "devices",
+    "initialGreeting": "Technology surrounds us everywhere. Which app or gadget can you not live without?"
+  },
+  {
+    "id": "dl_8",
+    "category": "Daily Life",
+    "title": "Weekend Planning",
+    "description": "Explain how you organize your upcoming weekend relaxation and tasks.",
+    "icon": "wb_sunny",
+    "initialGreeting": "The weekend is approaching! What are your plans for Saturday and Sunday?"
+  },
+  {
+    "id": "dl_9",
+    "category": "Daily Life",
+    "title": "Music & Songs",
+    "description": "Talk about your favorite artists, genres, or songs that motivate you.",
+    "icon": "music_note",
+    "initialGreeting": "Music changes our mood instantly! What genres or artists do you listen to most?"
+  },
+  {
+    "id": "dl_10",
+    "category": "Daily Life",
+    "title": "Hometown & Roots",
+    "description": "Describe your hometown, its culture, climate, and what makes it special.",
+    "icon": "location_city",
+    "initialGreeting": "Where did you grow up? Can you describe your hometown and what you love about it?"
+  },
+
+  {
+    "id": "pro_1",
+    "category": "Professional",
+    "title": "Software Developer Interview",
+    "description": "Practice answering technical background and project experience questions.",
+    "icon": "work",
+    "initialGreeting": "Welcome to your software developer interview! Can you introduce yourself and your main tech stack?"
+  },
+  {
+    "id": "pro_2",
+    "category": "Professional",
+    "title": "HR Behavioral Interview",
+    "description": "Use the STAR method to answer tough behavioral workplace questions.",
+    "icon": "badge",
+    "initialGreeting": "Tell me about a challenging situation you faced in a project team and how you resolved it."
+  },
+  {
+    "id": "pro_3",
+    "category": "Professional",
+    "title": "Client Status Update Call",
+    "description": "Deliver a concise project progress report and outline next major milestones.",
+    "icon": "call",
+    "initialGreeting": "Hi team, thanks for joining our project sync. Can you give us an update on this week's progress?"
+  },
+  {
+    "id": "pro_4",
+    "category": "Professional",
+    "title": "Agile Team Standup",
+    "description": "Practice stating yesterday's work, today's goals, and any current blockers.",
+    "icon": "groups",
+    "initialGreeting": "Good morning! Time for daily standup. What did you work on yesterday and what's on your plate today?"
+  },
+  {
+    "id": "pro_5",
+    "category": "Professional",
+    "title": "Product Demo Presentation",
+    "description": "Pitch a new feature or application demo pitch to stakeholders.",
+    "icon": "co_present",
+    "initialGreeting": "Welcome stakeholders! We are excited to present our new feature today. Who wants to begin the demo?"
+  },
+  {
+    "id": "pro_6",
+    "category": "Professional",
+    "title": "Salary & Offer Negotiation",
+    "description": "Practice confident, professional compensation discussion and terms.",
+    "icon": "attach_money",
+    "initialGreeting": "Thank you for reviewing our offer letter! We'd love to hear your thoughts on the compensation structure."
+  },
+  {
+    "id": "pro_7",
+    "category": "Professional",
+    "title": "Handling Workplace Conflicts",
+    "description": "Discuss how you handle conflicting priorities or feedback with colleagues.",
+    "icon": "record_voice_over",
+    "initialGreeting": "In fast-paced teams, opinions differ. How do you handle constructive disagreement with a teammate?"
+  },
+  {
+    "id": "pro_8",
+    "category": "Professional",
+    "title": "Explaining a Project Delay",
+    "description": "Articulate root causes, mitigation steps, and revised delivery timelines.",
+    "icon": "hourglass_empty",
+    "initialGreeting": "We noticed the milestone timeline slipped by a week. Can you explain what caused the delay and your fix?"
+  },
+
+  {
+    "id": "exam_1",
+    "category": "Exams",
+    "title": "IELTS Cue Card: Describe an Influential Leader",
+    "description": "Practice 2-minute fluent cue card monologue followed by follow-up queries.",
+    "icon": "quiz",
+    "initialGreeting": "Here is your IELTS Cue Card topic: 'Describe a leader or mentor who influenced you.' Take a moment, then begin!"
+  },
+  {
+    "id": "exam_2",
+    "category": "Exams",
+    "title": "IELTS Cue Card: An Environmental Issue",
+    "description": "Discuss global environmental challenges, solutions, and personal habits.",
+    "icon": "eco",
+    "initialGreeting": "Your cue card topic is: 'Discuss a major environmental challenge in your country and potential solutions.'"
+  },
+  {
+    "id": "exam_3",
+    "category": "Exams",
+    "title": "IELTS Cue Card: A Historical Place",
+    "description": "Describe a monument or historical site you visited and its significance.",
+    "icon": "account_balance",
+    "initialGreeting": "Your cue card topic: 'Describe a historical monument or site you visited.' Where is it and why is it famous?"
+  },
+  {
+    "id": "exam_4",
+    "category": "Exams",
+    "title": "TOEFL Speaking: Online vs In-Person Education",
+    "description": "State your preference clearly with supporting rationale and examples.",
+    "icon": "school",
+    "initialGreeting": "Some people prefer online learning, while others prefer traditional classrooms. State your view and explain why."
+  },
+  {
+    "id": "exam_5",
+    "category": "Exams",
+    "title": "TOEFL Speaking: Remote Work Culture",
+    "description": "Debate the pros and cons of remote working for young professionals.",
+    "icon": "computer",
+    "initialGreeting": "Do you believe working remotely benefits young software professionals more than office work? Explain your choice."
+  },
+
+  {
+    "id": "tech_1",
+    "category": "Technical",
+    "title": "Explain My Code",
+    "description": "Paste code or pick a snippet, then explain your function logic out loud.",
+    "icon": "code",
+    "initialGreeting": "Welcome to the technical simulator! Paste or pick a code snippet, then explain its logic step-by-step out loud."
+  },
+  {
+    "id": "tech_2",
+    "category": "Technical",
+    "title": "Whiteboard System Design",
+    "description": "Explain how you would design a scalable URL shortener or Chat service.",
+    "icon": "architecture",
+    "initialGreeting": "Let's do a system design session! How would you design a scalable URL shortening service like Bitly?"
+  },
+  {
+    "id": "tech_3",
+    "category": "Technical",
+    "title": "Explaining a Complex Bug",
+    "description": "Describe a difficult bug you debugged, root cause analysis, and the resolution.",
+    "icon": "bug_report",
+    "initialGreeting": "Tell me about the hardest software bug you've encountered recently. How did you diagnose and fix it?"
+  },
+  {
+    "id": "tech_4",
+    "category": "Technical",
+    "title": "REST API Design Best Practices",
+    "description": "Explain HTTP methods, status codes, authentication, and endpoint structure.",
+    "icon": "api",
+    "initialGreeting": "How do you design a clean, RESTful API? What HTTP methods and status codes do you use?"
+  },
+  {
+    "id": "tech_5",
+    "category": "Technical",
+    "title": "SQL vs NoSQL Databases",
+    "description": "Compare relational vs document databases for different project use-cases.",
+    "icon": "storage",
+    "initialGreeting": "When would you choose a relational SQL database over a NoSQL document store for a new app?"
+  }
+]

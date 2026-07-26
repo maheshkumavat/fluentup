@@ -1,0 +1,93 @@
+name: Build & Publish Release APK
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Signed APK & Create GitHub Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Validate Required GitHub Secrets
+        run: |
+          ERRORS=0
+          if [ -z "${{ secrets.KEYSTORE_BASE64 }}" ]; then echo "::error::KEYSTORE_BASE64 secret is missing or empty!"; ERRORS=$((ERRORS+1)); fi
+          if [ -z "${{ secrets.KEYSTORE_PASSWORD }}" ]; then echo "::error::KEYSTORE_PASSWORD secret is missing or empty!"; ERRORS=$((ERRORS+1)); fi
+          if [ -z "${{ secrets.KEY_ALIAS }}" ]; then echo "::error::KEY_ALIAS secret is missing or empty!"; ERRORS=$((ERRORS+1)); fi
+          if [ -z "${{ secrets.KEY_PASSWORD }}" ]; then echo "::error::KEY_PASSWORD secret is missing or empty!"; ERRORS=$((ERRORS+1)); fi
+          if [ -z "${{ secrets.SUPABASE_URL }}" ]; then echo "::error::SUPABASE_URL secret is missing or empty!"; ERRORS=$((ERRORS+1)); fi
+          if [ -z "${{ secrets.SUPABASE_ANON_KEY }}" ]; then echo "::error::SUPABASE_ANON_KEY secret is missing or empty!"; ERRORS=$((ERRORS+1)); fi
+          if [ $ERRORS -gt 0 ]; then
+            echo "Failed: $ERRORS required secret(s) are missing under GitHub Repository Settings -> Secrets and variables -> Actions"
+            exit 1
+          fi
+          echo "All required secrets are present and non-empty."
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Restore Keystore from Secret
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/upload-keystore.jks
+
+      - name: Create .env file for Flutter build
+        run: |
+          echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" > .env
+          echo "SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}" >> .env
+          echo "Created .env file successfully for Flutter asset bundler."
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Extract Version from pubspec.yaml
+        id: get_version
+        run: |
+          VERSION=$(grep 'version:' pubspec.yaml | awk '{print $2}' | cut -d'+' -f1)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Building version $VERSION with build number ${{ github.run_number }}"
+
+      - name: Build Release APK
+        env:
+          KEYSTORE_PATH: "upload-keystore.jks"
+          KEYSTORE_PASSWORD: "${{ secrets.KEYSTORE_PASSWORD }}"
+          KEY_ALIAS: "${{ secrets.KEY_ALIAS }}"
+          KEY_PASSWORD: "${{ secrets.KEY_PASSWORD }}"
+        run: |
+          flutter build apk --release --build-number=${{ github.run_number }}
+
+      - name: Rename APK Asset
+        run: |
+          mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/FluentUp-v${{ steps.get_version.outputs.version }}+${{ github.run_number }}.apk
+
+      - name: Create GitHub Release & Upload APK
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "v${{ steps.get_version.outputs.version }}+${{ github.run_number }}"
+          name: "FluentUp Release v${{ steps.get_version.outputs.version }}+${{ github.run_number }}"
+          body: |
+            Automated GitHub Actions CI/CD Build #${{ github.run_number }}
+            
+            ### Installation
+            Download the attached `FluentUp-v*.apk` directly to your Android device to install or update the app.
+          files: build/app/outputs/flutter-apk/FluentUp-v*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

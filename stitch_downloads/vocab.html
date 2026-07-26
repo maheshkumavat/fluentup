@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#fffbff",
+                    "on-secondary-fixed-variant": "#474746",
+                    "surface": "#faf9f9",
+                    "surface-tint": "#1a57c8",
+                    "error": "#ba1a1a",
+                    "on-primary-container": "#fffcff",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "error-container": "#ffdad6",
+                    "inverse-surface": "#303031",
+                    "on-tertiary-fixed-variant": "#743500",
+                    "tertiary-fixed-dim": "#ffb689",
+                    "secondary": "#5f5e5e",
+                    "surface-bright": "#faf9f9",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed": "#001847",
+                    "on-surface-variant": "#434653",
+                    "surface-container": "#efeded",
+                    "background": "#faf9f9",
+                    "tertiary": "#944600",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed": "#ffdbc8",
+                    "on-surface": "#1b1c1c",
+                    "primary-container": "#3b6fe0",
+                    "secondary-fixed": "#e5e2e1",
+                    "primary-fixed": "#dae2ff",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed-variant": "#0040a1",
+                    "surface-dim": "#dbdad9",
+                    "surface-container-highest": "#e3e2e2",
+                    "surface-variant": "#e3e2e2",
+                    "primary": "#1555c6",
+                    "secondary-container": "#e2dfde",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "surface-container-high": "#e9e8e8",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed-dim": "#b2c5ff",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-primary": "#b2c5ff",
+                    "on-background": "#1b1c1c",
+                    "outline": "#737785",
+                    "outline-variant": "#c3c6d6",
+                    "on-tertiary": "#ffffff",
+                    "inverse-on-surface": "#f2f0f0",
+                    "surface-container-low": "#f5f3f3",
+                    "tertiary-container": "#ba5900",
+                    "on-secondary-container": "#636262",
+                    "on-tertiary-fixed": "#321300"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "section-gap": "32px",
+                    "hairline-weight": "1px",
+                    "element-gap": "16px",
+                    "stack-sm": "8px",
+                    "container-padding": "20px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Inter"],
+                    "mono-md": ["JetBrains Mono"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "mono-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #FDFDFB;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .flashcard-transition {
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-surface font-body-md min-h-screen flex flex-col">
+<!-- Top App Bar -->
+<header class="flex justify-between items-center px-container-padding h-16 w-full fixed top-0 bg-surface z-40 border-b border-outline-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="language">language</span>
+<span class="font-headline-md text-headline-md font-bold text-primary">FluentUp</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-1 py-1 px-3 bg-tertiary-fixed rounded-full">
+<span class="material-symbols-outlined text-tertiary text-[18px]" data-icon="local_fire_department">local_fire_department</span>
+<span class="font-label-md text-label-md text-on-tertiary-fixed font-bold">14</span>
+</div>
+<span class="material-symbols-outlined text-secondary hover:opacity-80 transition-opacity duration-200 cursor-pointer" data-icon="settings">settings</span>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center px-container-padding pt-20 pb-24">
+<!-- Progress Bar (Editorial style) -->
+<div class="w-full max-w-sm mb-12">
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-sm text-label-sm text-secondary">New Word (12/20)</span>
+<span class="font-label-sm text-label-sm text-primary font-bold">60%</span>
+</div>
+<div class="h-1 w-full bg-[#E5E5E5] overflow-hidden">
+<div class="h-full bg-primary-container w-[60%] transition-all duration-500"></div>
+</div>
+</div>
+<!-- Flashcard -->
+<div class="flashcard-transition w-full max-w-sm aspect-[3/4] bg-surface-container-lowest border border-[#E5E5E5] flex flex-col items-center justify-center text-center p-8 relative" id="flashcard">
+<div class="absolute top-4 left-4">
+<span class="font-label-sm text-label-sm px-2 py-1 bg-surface-container text-secondary rounded-[4px]">B2 Upper Intermediate</span>
+</div>
+<div class="flex flex-col gap-6">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-[#1A1A1A] font-extrabold tracking-tight">Eloquent</h1>
+<div class="h-hairline-weight w-12 bg-outline-variant mx-auto"></div>
+<p class="font-body-lg text-body-lg text-secondary">Fluent or persuasive in speaking or writing.</p>
+<p class="font-body-md text-body-md italic text-outline italic">"She made an eloquent appeal for support."</p>
+</div>
+<div class="absolute bottom-8 w-full px-8">
+<button class="w-full flex items-center justify-center gap-2 text-primary font-label-md text-label-md py-2 border border-transparent hover:bg-primary/5 transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="volume_up">volume_up</span>
+                    Listen
+                 </button>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex w-full max-w-sm gap-element-gap mt-12">
+<button class="flex-1 py-4 border border-[#E5E5E5] text-on-surface font-label-md text-label-md hover:bg-surface-container-low transition-colors scale-95 active:scale-90 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="history">history</span>
+                Again
+            </button>
+<button class="flex-1 py-4 border border-[#E5E5E5] text-on-surface font-label-md text-label-md hover:bg-surface-container-low transition-colors scale-95 active:scale-90 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="done_all">done_all</span>
+                Easy
+            </button>
+</div>
+<!-- Editorial Info Section -->
+<section class="w-full max-w-sm mt-12 pt-8 border-t border-[#E5E5E5]">
+<h3 class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-4">Etymology</h3>
+<p class="font-body-md text-body-md text-on-surface leading-relaxed">
+                From Latin <span class="font-mono-md text-mono-md text-primary">eloquent-</span> ‘speaking out’, from the verb <span class="font-mono-md text-mono-md text-primary">eloqui</span>.
+            </p>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center py-stack-sm bg-surface border-t border-outline-variant">
+<a class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant hover:text-primary-container scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+<span class="font-label-sm text-label-sm">Chat</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant hover:text-primary-container scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-label-sm text-label-sm">Grammar</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant hover:text-primary-container scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="theater_comedy">theater_comedy</span>
+<span class="font-label-sm text-label-sm">Roleplay</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed hover:text-primary-container scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="style" style="font-variation-settings: 'FILL' 1;">style</span>
+<span class="font-label-sm text-label-sm">Vocabulary</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant hover:text-primary-container scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for the flashcard
+        const card = document.getElementById('flashcard');
+        let isFlipped = false;
+
+        card.addEventListener('click', () => {
+            card.style.transform = isFlipped ? 'rotateY(0deg)' : 'rotateY(10deg) scale(1.02)';
+            isFlipped = !isFlipped;
+            setTimeout(() => {
+                card.style.transform = 'rotateY(0deg) scale(1)';
+            }, 300);
+        });
+
+        // Simulating the action button clicks
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const originalText = btn.innerHTML;
+                if (btn.innerText.includes('Easy')) {
+                    btn.innerHTML = '<span class="material-symbols-outlined text-[18px]">check</span> Saved';
+                    btn.classList.add('bg-primary-container', 'text-on-primary');
+                } else if (btn.innerText.includes('Again')) {
+                    btn.innerHTML = '<span class="material-symbols-outlined text-[18px]">refresh</span> Reviewing';
+                    btn.classList.add('bg-secondary-container');
+                }
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.remove('bg-primary-container', 'text-on-primary', 'bg-secondary-container');
+                }, 1000);
+            });
+        });
+    </script>
+</body></html>
