@@ -111,6 +111,13 @@ class GymProvider extends ChangeNotifier {
   Map<String, dynamic>? get activeUnitSimpleExplanation => _activeUnitSimpleExplanation;
   bool get isExplanationLoading => _isExplanationLoading;
 
+  // Unit Notes State
+  String? _activeUnitNote;
+  List<Map<String, dynamic>> _allNotesList = [];
+
+  String? get activeUnitNote => _activeUnitNote;
+  List<Map<String, dynamic>> get allNotesList => _allNotesList;
+
   String? get unlockedCelebrationLevel => _unlockedCelebrationLevel;
   CurriculumUnit? get adaptiveReviewUnit => _adaptiveReviewUnit;
 
@@ -198,10 +205,45 @@ class GymProvider extends ChangeNotifier {
       _userPlacementLevel = placement ?? latestAssessment?['overall_level'] as String?;
 
       _isCurriculumLoaded = true;
+      await fetchAllNotes();
       notifyListeners();
     } catch (e) {
       debugPrint("Error loading curriculum: $e");
     }
+  }
+
+  String _getCurrentUserId() {
+    return SupabaseService.instance.currentUserId ?? 'local_user';
+  }
+
+  Future<void> loadNoteForUnit(String unitId) async {
+    final userId = _getCurrentUserId();
+    _activeUnitNote = await DbHelper.instance.getUnitNote(unitId: unitId, userId: userId);
+    notifyListeners();
+  }
+
+  Future<void> saveNoteForUnit(String unitId, String noteText) async {
+    final userId = _getCurrentUserId();
+    await DbHelper.instance.saveUnitNote(unitId: unitId, userId: userId, noteText: noteText);
+    _activeUnitNote = noteText;
+    await fetchAllNotes();
+  }
+
+  Future<void> fetchAllNotes() async {
+    final userId = _getCurrentUserId();
+    final notes = await DbHelper.instance.getAllUnitNotes(userId: userId);
+    _allNotesList = notes.map((n) {
+      final unitId = n['unit_id'] as String;
+      final unitMatches = _allUnits.where((u) => u.id == unitId);
+      final title = unitMatches.isNotEmpty ? unitMatches.first.title : unitId;
+      final level = unitMatches.isNotEmpty ? unitMatches.first.level : '';
+      return {
+        ...n,
+        'unit_title': title,
+        'unit_level': level,
+      };
+    }).toList();
+    notifyListeners();
   }
 
   Future<void> reloadMasteryData() async {
@@ -221,6 +263,7 @@ class GymProvider extends ChangeNotifier {
   Future<void> fetchEnhancedUnitExplanation(CurriculumUnit unit) async {
     _isExplanationLoading = true;
     _activeUnitSimpleExplanation = null;
+    await loadNoteForUnit(unit.id);
     notifyListeners();
 
     try {

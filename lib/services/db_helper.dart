@@ -20,7 +20,7 @@ class DbHelper {
 
     return await openDatabase(
       path,
-      version: 11,
+      version: 12,
       onCreate: _createDB,
       onUpgrade: _onUpgrade,
     );
@@ -158,6 +158,17 @@ class DbHelper {
         target_topic_id TEXT NOT NULL,
         is_completed INTEGER NOT NULL DEFAULT 0,
         completed_timestamp TEXT
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE unit_notes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        unit_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        note_text TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        UNIQUE(unit_id, user_id)
       )
     ''');
   }
@@ -298,6 +309,18 @@ class DbHelper {
           target_topic_id TEXT NOT NULL,
           is_completed INTEGER NOT NULL DEFAULT 0,
           completed_timestamp TEXT
+        )
+      ''');
+    }
+    if (oldVersion < 12) {
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS unit_notes (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          unit_id TEXT NOT NULL,
+          user_id TEXT NOT NULL,
+          note_text TEXT NOT NULL,
+          updated_at TEXT NOT NULL,
+          UNIQUE(unit_id, user_id)
         )
       ''');
     }
@@ -759,6 +782,44 @@ class DbHelper {
     await completeRoadmapDay(dayNumber);
   }
 
+  // Unit Notes CRUD
+  Future<void> saveUnitNote({required String unitId, required String userId, required String noteText}) async {
+    final db = await instance.database;
+    await db.insert(
+      'unit_notes',
+      {
+        'unit_id': unitId,
+        'user_id': userId,
+        'note_text': noteText,
+        'updated_at': DateTime.now().toIso8601String(),
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<String?> getUnitNote({required String unitId, required String userId}) async {
+    final db = await instance.database;
+    final res = await db.query(
+      'unit_notes',
+      where: 'unit_id = ? AND user_id = ?',
+      whereArgs: [unitId, userId],
+    );
+    if (res.isNotEmpty) {
+      return res.first['note_text'] as String?;
+    }
+    return null;
+  }
+
+  Future<List<Map<String, dynamic>>> getAllUnitNotes({required String userId}) async {
+    final db = await instance.database;
+    return await db.query(
+      'unit_notes',
+      where: 'user_id = ?',
+      whereArgs: [userId],
+      orderBy: 'updated_at DESC',
+    );
+  }
+
   Future<void> clearUserData() async {
     final db = await instance.database;
     await db.delete('messages');
@@ -771,5 +832,6 @@ class DbHelper {
     await db.delete('session_scores');
     await db.delete('roadmap_progress');
     await db.delete('grammar_mastery');
+    await db.delete('unit_notes');
   }
 }

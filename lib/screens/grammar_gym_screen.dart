@@ -68,6 +68,156 @@ class _GrammarGymScreenState extends State<GrammarGymScreen> {
     );
   }
 
+  void _showAllNotesSheet(BuildContext context, GymProvider gymProvider) {
+    gymProvider.fetchAllNotes();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => Consumer<GymProvider>(
+        builder: (context, provider, child) {
+          final notes = provider.allNotesList;
+
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.80,
+            decoration: const BoxDecoration(
+              color: AppTheme.background,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+            ),
+            child: Column(
+              children: [
+                const SizedBox(height: 12),
+                Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(color: AppTheme.hairline, borderRadius: BorderRadius.circular(2)),
+                ),
+                const SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Row(
+                        children: [
+                          Icon(Icons.menu_book_rounded, color: AppTheme.primary, size: 24),
+                          SizedBox(width: 10),
+                          Text(
+                            "My Grammar Notebook",
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
+                          ),
+                        ],
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close, color: AppTheme.textSecondary),
+                        onPressed: () => Navigator.of(ctx).pop(),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(color: AppTheme.hairline),
+                Expanded(
+                  child: notes.isEmpty
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(32),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.note_alt_outlined, size: 64, color: AppTheme.textSecondary.withOpacity(0.5)),
+                                const SizedBox(height: 16),
+                                const Text(
+                                  "No Notes Saved Yet",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
+                                ),
+                                const SizedBox(height: 8),
+                                const Text(
+                                  "Open any grammar unit explanation and write your own understanding in 'My Notes' to review here!",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 13, color: AppTheme.textSecondary),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : ListView.separated(
+                          padding: const EdgeInsets.all(20),
+                          itemCount: notes.length,
+                          separatorBuilder: (_, __) => const SizedBox(height: 14),
+                          itemBuilder: (context, index) {
+                            final item = notes[index];
+                            final title = item['unit_title'] as String? ?? 'Grammar Unit';
+                            final level = item['unit_level'] as String? ?? '';
+                            final noteText = item['note_text'] as String? ?? '';
+                            final updatedAt = item['updated_at'] as String? ?? '';
+                            String formattedDate = '';
+                            try {
+                              final dt = DateTime.parse(updatedAt);
+                              formattedDate = "${dt.day}/${dt.month}/${dt.year}";
+                            } catch (_) {}
+
+                            return Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: AppTheme.surface,
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(color: AppTheme.hairline),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          title,
+                                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
+                                        ),
+                                      ),
+                                      if (level.isNotEmpty)
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                          decoration: BoxDecoration(
+                                            color: AppTheme.primary.withOpacity(0.15),
+                                            borderRadius: BorderRadius.circular(6),
+                                          ),
+                                          child: Text(
+                                            level,
+                                            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppTheme.primary),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    noteText,
+                                    style: const TextStyle(fontSize: 14, color: AppTheme.textPrimary, height: 1.4),
+                                  ),
+                                  if (formattedDate.isNotEmpty) ...[
+                                    const SizedBox(height: 8),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        "Saved on $formattedDate",
+                                        style: TextStyle(fontSize: 11, color: AppTheme.textSecondary.withOpacity(0.7)),
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final gymProvider = Provider.of<GymProvider>(context);
@@ -86,6 +236,11 @@ class _GrammarGymScreenState extends State<GrammarGymScreen> {
         title: const Text("Grammar Learning Path"),
         centerTitle: false,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.menu_book_rounded, color: AppTheme.primary),
+            onPressed: () => _showAllNotesSheet(context, gymProvider),
+            tooltip: "My Notes Notebook",
+          ),
           IconButton(
             icon: const Icon(Icons.refresh, color: AppTheme.textSecondary),
             onPressed: () => gymProvider.initCurriculum(),
@@ -511,20 +666,30 @@ class _UnitModalSheet extends StatefulWidget {
 class _UnitModalSheetState extends State<_UnitModalSheet> {
   int _step = 1; // 1: Overview, 2: Practice Session, 3: Completed Score
   final TextEditingController _typedInputController = TextEditingController();
+  late TextEditingController _noteController;
   bool _isListening = false;
+  bool _isSavingNote = false;
   String _spokenText = "";
 
   @override
   void initState() {
     super.initState();
+    _noteController = TextEditingController(text: widget.gymProvider.activeUnitNote ?? "");
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      widget.gymProvider.fetchEnhancedUnitExplanation(widget.unit);
+      widget.gymProvider.fetchEnhancedUnitExplanation(widget.unit).then((_) {
+        if (mounted) {
+          setState(() {
+            _noteController.text = widget.gymProvider.activeUnitNote ?? "";
+          });
+        }
+      });
     });
   }
 
   @override
   void dispose() {
     _typedInputController.dispose();
+    _noteController.dispose();
     super.dispose();
   }
 
@@ -731,6 +896,93 @@ class _UnitModalSheetState extends State<_UnitModalSheet> {
                     )) ?? [
                       Text("• Common slip to avoid: \"${widget.unit.exampleCommonMistake}\"", style: const TextStyle(fontSize: 13, color: AppTheme.textSecondary)),
                     ]),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // My Notes Card
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppTheme.surface,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppTheme.primary.withOpacity(0.3)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Row(
+                  children: [
+                    Icon(Icons.edit_note_rounded, color: AppTheme.primary, size: 22),
+                    SizedBox(width: 8),
+                    Text(
+                      "My Notes",
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppTheme.primary),
+                    ),
+                    Spacer(),
+                    Text(
+                      "Personal Notebook",
+                      style: TextStyle(fontSize: 11, color: AppTheme.textSecondary),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                TextField(
+                  controller: _noteController,
+                  minLines: 3,
+                  maxLines: 6,
+                  style: const TextStyle(fontSize: 14, color: AppTheme.textPrimary),
+                  decoration: InputDecoration(
+                    hintText: "Write your understanding of this grammar rule in your own words...",
+                    hintStyle: TextStyle(fontSize: 13, color: AppTheme.textSecondary.withOpacity(0.6)),
+                    filled: true,
+                    fillColor: AppTheme.background,
+                    contentPadding: const EdgeInsets.all(12),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: AppTheme.hairline),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: AppTheme.primary),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.primary,
+                        foregroundColor: Colors.black,
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                      onPressed: _isSavingNote
+                          ? null
+                          : () async {
+                              setState(() => _isSavingNote = true);
+                              await gymProvider.saveNoteForUnit(widget.unit.id, _noteController.text.trim());
+                              if (mounted) {
+                                setState(() => _isSavingNote = false);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Note saved to your personal notebook!"),
+                                    duration: Duration(seconds: 2),
+                                    backgroundColor: Colors.green,
+                                  ),
+                                );
+                              }
+                            },
+                      icon: _isSavingNote
+                          ? const SizedBox(width: 14, height: 14, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black))
+                          : const Icon(Icons.save_rounded, size: 18),
+                      label: Text(_isSavingNote ? "Saving..." : "Save Note", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
