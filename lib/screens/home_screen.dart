@@ -11,6 +11,7 @@ import '../services/learner_profile_service.dart';
 import '../services/update_service.dart';
 import '../theme.dart';
 import '../widgets/tactile_button.dart';
+import '../widgets/floating_assistant_widget.dart';
 
 import 'chat_screen.dart';
 import 'describe_image_screen.dart';
@@ -885,34 +886,43 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       backgroundColor: AppTheme.background,
-      body: Column(
+      body: Stack(
         children: [
-          if (_isRootedOrTampered)
-            Container(
-              color: Colors.amber.shade900,
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: const SafeArea(
-                bottom: false,
-                child: Row(
-                  children: [
-                    Icon(Icons.security, color: Colors.white, size: 20),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        "This device appears to be rooted, some features may be restricted for security",
-                        style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
-                      ),
+          Column(
+            children: [
+              if (_isRootedOrTampered)
+                Container(
+                  color: Colors.amber.shade900,
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: const SafeArea(
+                    bottom: false,
+                    child: Row(
+                      children: [
+                        Icon(Icons.security, color: Colors.white, size: 20),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            "This device appears to be rooted, some features may be restricted for security",
+                            style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
+                ),
+              Expanded(
+                child: IndexedStack(
+                  index: _currentIndex,
+                  children: screens,
                 ),
               ),
-            ),
-          Expanded(
-            child: IndexedStack(
-              index: _currentIndex,
-              children: screens,
-            ),
+            ],
+          ),
+          const Positioned(
+            bottom: 16,
+            right: 16,
+            child: FloatingAssistantWidget(),
           ),
         ],
       ),
