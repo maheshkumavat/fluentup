@@ -5,6 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../theme.dart';
 import '../providers/gym_provider.dart';
 import '../widgets/tactile_button.dart';
+import '../widgets/loading_skeleton.dart';
 
 class GrammarGymScreen extends StatefulWidget {
   const GrammarGymScreen({super.key});
@@ -1007,18 +1008,7 @@ class _UnitModalSheetState extends State<_UnitModalSheet> {
 
   Widget _buildPracticeStep(BuildContext context, GymProvider gymProvider) {
     if (gymProvider.isSessionLoading) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircularProgressIndicator(color: AppTheme.primary),
-            const SizedBox(height: 16),
-            TextStyle(color: AppTheme.textSecondary) == null
-                ? const SizedBox()
-                : Text("Generating fresh Groq AI exercises...", style: TextStyle(color: AppTheme.textSecondary)),
-          ],
-        ),
-      );
+      return const ExerciseSkeletonLoader();
     }
 
     if (gymProvider.activeItems.isEmpty) {

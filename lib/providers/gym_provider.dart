@@ -261,11 +261,13 @@ class GymProvider extends ChangeNotifier {
   }
 
   Future<void> fetchEnhancedUnitExplanation(CurriculumUnit unit) async {
+    if (_isExplanationLoading) return;
     _isExplanationLoading = true;
     _activeUnitSimpleExplanation = null;
     await loadNoteForUnit(unit.id);
     notifyListeners();
 
+    final stopwatch = Stopwatch()..start();
     try {
       if (SupabaseService.instance.isInitialized) {
         final prompt =
@@ -287,14 +289,19 @@ class GymProvider extends ChangeNotifier {
             {"role": "system", "content": prompt}
           ],
           'temperature': 0.4,
+          'max_tokens': 350,
           'response_format': {"type": "json_object"},
         });
+
+        stopwatch.stop();
+        debugPrint("⏱️ [LATENCY AUDIT] Groq Explanation generation took: ${stopwatch.elapsedMilliseconds} ms");
 
         final replyText = data['choices'][0]['message']['content'] as String;
         _activeUnitSimpleExplanation = jsonDecode(replyText.trim());
       }
     } catch (e) {
-      debugPrint("Groq explanation generation fallback: $e");
+      stopwatch.stop();
+      debugPrint("⏱️ [LATENCY AUDIT] Groq explanation failed after ${stopwatch.elapsedMilliseconds} ms: $e");
     } finally {
       if (_activeUnitSimpleExplanation == null) {
         _activeUnitSimpleExplanation = {
@@ -316,6 +323,7 @@ class GymProvider extends ChangeNotifier {
   }
 
   Future<void> startUnitPractice(CurriculumUnit unit, {int itemCount = 5}) async {
+    if (_isSessionLoading) return;
     _activeUnit = unit;
     _currentItemIndex = 0;
     _sessionCorrectCount = 0;
@@ -326,6 +334,7 @@ class GymProvider extends ChangeNotifier {
     _isSessionLoading = true;
     notifyListeners();
 
+    final stopwatch = Stopwatch()..start();
     try {
       final items = <PracticeItem>[];
 
@@ -342,8 +351,12 @@ class GymProvider extends ChangeNotifier {
               {"role": "system", "content": systemPrompt}
             ],
             'temperature': 0.7,
+            'max_tokens': 500,
             'response_format': {"type": "json_object"},
           });
+
+          stopwatch.stop();
+          debugPrint("⏱️ [LATENCY AUDIT] Groq Exercise Batch generation took: ${stopwatch.elapsedMilliseconds} ms");
 
           final replyText = data['choices'][0]['message']['content'] as String;
           final parsed = jsonDecode(replyText.trim());
@@ -363,7 +376,8 @@ class GymProvider extends ChangeNotifier {
             ));
           }
         } catch (e) {
-          debugPrint("Groq test questions batch fallback: $e");
+          stopwatch.stop();
+          debugPrint("⏱️ [LATENCY AUDIT] Groq exercise batch generation failed after ${stopwatch.elapsedMilliseconds} ms: $e");
         }
       }
 
@@ -404,6 +418,7 @@ class GymProvider extends ChangeNotifier {
   }
 
   Future<void> submitItemAnswer(String answer) async {
+    if (_isItemSubmitting) return;
     if (_activeUnit == null || _currentItemIndex >= _activeItems.length) return;
     if (answer.trim().isEmpty) return;
 
@@ -414,6 +429,7 @@ class GymProvider extends ChangeNotifier {
     final item = _activeItems[_currentItemIndex];
     item.userAnswer = answer.trim();
 
+    final stopwatch = Stopwatch()..start();
     try {
       final systemPrompt =
           "You are a strict but kind English grammar coach evaluating '${_activeUnit!.title}'. "
@@ -428,8 +444,12 @@ class GymProvider extends ChangeNotifier {
           {"role": "system", "content": systemPrompt}
         ],
         'temperature': 0.3,
+        'max_tokens': 200,
         'response_format': {"type": "json_object"},
       });
+
+      stopwatch.stop();
+      debugPrint("⏱️ [LATENCY AUDIT] Groq Submission Scoring took: ${stopwatch.elapsedMilliseconds} ms");
 
       final replyText = data['choices'][0]['message']['content'] as String;
       final result = jsonDecode(replyText.trim());
@@ -450,7 +470,8 @@ class GymProvider extends ChangeNotifier {
         );
       }
     } catch (e) {
-      debugPrint("Error grading item answer: $e");
+      stopwatch.stop();
+      debugPrint("⏱️ [LATENCY AUDIT] Groq submission scoring failed after ${stopwatch.elapsedMilliseconds} ms: $e");
       // Fallback simple grading if network fails
       item.isCorrect = answer.trim().length > 3;
       item.correctedSentence = item.isCorrect! ? answer : _activeUnit!.exampleCorrect;
