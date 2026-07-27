@@ -4,6 +4,7 @@ import '../services/db_helper.dart';
 import '../services/learner_profile_service.dart';
 import '../services/supabase_service.dart';
 import 'progress_provider.dart';
+import 'roadmap_provider.dart';
 
 class MissionItem {
   final String id;
@@ -251,16 +252,22 @@ class MissionProvider extends ChangeNotifier {
     await DbHelper.instance.setSetting('daily_mission_bonus_claimed', _bonusClaimed.toString());
   }
 
-  Future<void> completeMission(String id, ProgressProvider progressProvider) async {
+  Future<void> completeMission(String id, ProgressProvider progressProvider, {RoadmapProvider? roadmapProvider}) async {
     final index = _missions.indexWhere((m) => m.id == id);
     if (index != -1 && !_missions[index].isCompleted) {
       _missions[index].isCompleted = true;
       await progressProvider.addXP(_missions[index].xpReward);
 
       // Check if all completed and bonus not claimed
-      if (allCompleted && !_bonusClaimed) {
-        _bonusClaimed = true;
-        await progressProvider.addXP(150); // Mission Complete Bonus!
+      if (allCompleted) {
+        if (!_bonusClaimed) {
+          _bonusClaimed = true;
+          await progressProvider.addXP(150); // Mission Complete Bonus!
+        }
+        if (roadmapProvider != null) {
+          final currentDay = roadmapProvider.currentFocusDay?.dayNumber ?? 1;
+          await roadmapProvider.markDayCompleted(currentDay);
+        }
       }
 
       final todayStr = DateTime.now().toIso8601String().substring(0, 10);
