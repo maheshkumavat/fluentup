@@ -152,7 +152,19 @@ class ChatProvider extends ChangeNotifier {
         if (valUser == 'true') return true;
       }
       final value = await DbHelper.instance.getSetting('onboarding_completed');
-      return value == 'true';
+      if (value == 'true') return true;
+
+      // Fallback check: If baseline assessment or user profile details exist, onboarding was completed
+      final assessment = await DbHelper.instance.getLatestAssessment();
+      if (assessment != null) return true;
+
+      final userName = await DbHelper.instance.getSetting('user_name');
+      final cefrLevel = await DbHelper.instance.getSetting('user_cefr_level');
+      if (userName != null && userName.isNotEmpty && cefrLevel != null && cefrLevel.isNotEmpty) {
+        return true;
+      }
+
+      return false;
     } catch (e) {
       return false;
     }

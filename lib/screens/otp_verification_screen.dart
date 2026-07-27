@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/chat_provider.dart';
 import '../services/supabase_service.dart';
 import '../services/db_helper.dart';
 import '../theme.dart';
@@ -89,9 +91,10 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     try {
       await SupabaseService.instance.verifyEmailOtp(widget.email, code);
 
-      final onboardingDone = await DbHelper.instance.getSetting('onboarding_completed');
+      final chatProvider = Provider.of<ChatProvider>(context, listen: false);
+      final onboardingDone = await chatProvider.isOnboardingCompleted();
       if (mounted) {
-        if (onboardingDone == 'true') {
+        if (onboardingDone) {
           Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
         } else {
           Navigator.pushNamedAndRemoveUntil(context, '/onboarding', (route) => false);
