@@ -23,6 +23,7 @@ import 'roadmap_screen.dart';
 import 'roleplay_screen.dart';
 import 'topic_library_screen.dart';
 import 'vocabulary_screen.dart';
+import 'real_world_missions_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -71,44 +72,46 @@ class _HomeScreenState extends State<HomeScreen> {
   void _navigateToMissionTarget(MissionItem item, Map<String, String>? recTopic) async {
     final missionProvider = Provider.of<MissionProvider>(context, listen: false);
     final progressProvider = Provider.of<ProgressProvider>(context, listen: false);
+    bool? completed;
 
     switch (item.type) {
       case 'lesson':
-        await Navigator.of(context).push(
+        completed = await Navigator.of(context).push<bool>(
           MaterialPageRoute(builder: (context) => const GrammarGymScreen()),
         );
         break;
       case 'practice':
-        await Navigator.of(context).push(
+        completed = await Navigator.of(context).push<bool>(
           MaterialPageRoute(builder: (context) => const VocabularyScreen()),
         );
         break;
       case 'conversation':
-        await Navigator.of(context).push(
+        completed = await Navigator.of(context).push<bool>(
           MaterialPageRoute(
             builder: (context) => PracticeCallScreen(topic: item.targetData.isNotEmpty ? item.targetData : recTopic),
           ),
         );
         break;
       case 'challenge':
-        await Navigator.of(context).push(
+        completed = await Navigator.of(context).push<bool>(
           MaterialPageRoute(builder: (context) => RoleplayScreen()),
         );
         break;
       case 'review':
-        await Navigator.of(context).push(
+        completed = await Navigator.of(context).push<bool>(
           MaterialPageRoute(builder: (context) => const GrammarGymScreen()),
         );
         break;
       default:
-        await Navigator.of(context).push(
+        completed = await Navigator.of(context).push<bool>(
           MaterialPageRoute(builder: (context) => const TopicLibraryScreen()),
         );
     }
 
-    // Auto-check mission upon return
-    if (!item.isCompleted) {
-      await missionProvider.completeMission(item.id, progressProvider);
+    // Auto-check mission upon return ONLY if completed was returned true
+    final roadmapProvider = Provider.of<RoadmapProvider>(context, listen: false);
+    if (!item.isCompleted && completed == true) {
+      await missionProvider.completeMission(item.id, progressProvider, roadmapProvider: roadmapProvider);
     }
   }
 
@@ -547,33 +550,64 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ],
                             ),
-                            child: const Row(
+                            child: Column(
                               children: [
-                                Icon(Icons.emoji_events, color: Colors.white, size: 36),
-                                SizedBox(width: 14),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "🎉 MISSION COMPLETE!",
-                                        style: TextStyle(
-                                          fontFamily: 'Inter',
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
+                                const Row(
+                                  children: [
+                                    Icon(Icons.emoji_events, color: Colors.white, size: 36),
+                                    SizedBox(width: 14),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "🎉 MISSION COMPLETE!",
+                                            style: TextStyle(
+                                              fontFamily: 'Inter',
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          SizedBox(height: 2),
+                                          Text(
+                                            "+150 Bonus XP Earned! Great job today!",
+                                            style: TextStyle(
+                                              fontFamily: 'Inter',
+                                              fontSize: 12,
+                                              color: Colors.white70,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      SizedBox(height: 2),
-                                      Text(
-                                        "+150 Bonus XP Earned! Great job today!",
-                                        style: TextStyle(
-                                          fontFamily: 'Inter',
-                                          fontSize: 12,
-                                          color: Colors.white70,
-                                        ),
-                                      ),
-                                    ],
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 12),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton.icon(
+                                    icon: const Icon(Icons.arrow_forward, color: AppTheme.primary, size: 18),
+                                    label: const Text(
+                                      "Start Next Day's Missions",
+                                      style: TextStyle(fontFamily: 'Inter', fontSize: 13, fontWeight: FontWeight.bold, color: AppTheme.primary),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.white,
+                                      elevation: 0,
+                                      padding: const EdgeInsets.symmetric(vertical: 10),
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                    ),
+                                    onPressed: () async {
+                                      final roadmapProvider = Provider.of<RoadmapProvider>(context, listen: false);
+                                      await missionProvider.refreshMissions();
+                                      roadmapProvider.generateNextBatchAuto();
+                                      if (context.mounted) {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          const SnackBar(content: Text("Next day's missions generated!")),
+                                        );
+                                      }
+                                    },
                                   ),
                                 ),
                               ],
@@ -705,7 +739,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.amber.shade800,
                           onTap: () {
                             Navigator.of(context).push(
-                              MaterialPageRoute(builder: (context) => const RealWorldMissionsScreen()),
+                              MaterialPageRoute(builder: (context) => RealWorldMissionsScreen()),
                             );
                           },
                         ),

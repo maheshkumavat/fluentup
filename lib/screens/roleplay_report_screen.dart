@@ -221,7 +221,7 @@ class RoleplayReportScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 48,
                 child: OutlinedButton(
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () => Navigator.of(context).pop(true),
                   child: const Text("Back to Scenarios"),
                 ),
               ),

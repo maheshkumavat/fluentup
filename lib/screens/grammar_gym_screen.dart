@@ -515,6 +515,14 @@ class _UnitModalSheetState extends State<_UnitModalSheet> {
   String _spokenText = "";
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.gymProvider.fetchEnhancedUnitExplanation(widget.unit);
+    });
+  }
+
+  @override
   void dispose() {
     _typedInputController.dispose();
     super.dispose();
@@ -603,7 +611,7 @@ class _UnitModalSheetState extends State<_UnitModalSheet> {
           // Body Views depending on Step
           Expanded(
             child: _step == 1
-                ? _buildOverviewStep(context)
+                ? _buildOverviewStep(context, gymProvider)
                 : _step == 2
                     ? _buildPracticeStep(context, gymProvider)
                     : _buildCompletedStep(context, gymProvider),
@@ -613,13 +621,13 @@ class _UnitModalSheetState extends State<_UnitModalSheet> {
     );
   }
 
-  Widget _buildOverviewStep(BuildContext context) {
+  Widget _buildOverviewStep(BuildContext context, GymProvider gymProvider) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Explanation Card
+          // Simple Plain-Language Explanation Card
           Container(
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
@@ -635,99 +643,109 @@ class _UnitModalSheetState extends State<_UnitModalSheet> {
                     Icon(Icons.lightbulb_outline, color: AppTheme.primary, size: 20),
                     SizedBox(width: 8),
                     Text(
-                      "Grammar Rule Explanation",
+                      "Simple Basics Explanation",
                       style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppTheme.primary),
                     ),
                   ],
                 ),
                 const SizedBox(height: 10),
-                Text(
-                  widget.unit.explanation,
-                  style: const TextStyle(fontSize: 14, color: AppTheme.textPrimary, height: 1.4),
-                ),
+                if (gymProvider.isExplanationLoading)
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    child: Row(
+                      children: [
+                        SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: AppTheme.primary)),
+                        SizedBox(width: 12),
+                        Text("Loading plain-language explanation...", style: TextStyle(fontSize: 13, color: AppTheme.textSecondary)),
+                      ],
+                    ),
+                  )
+                else
+                  Text(
+                    gymProvider.activeUnitSimpleExplanation?['simple_explanation'] ?? widget.unit.explanation,
+                    style: const TextStyle(fontSize: 14, color: AppTheme.textPrimary, height: 1.4),
+                  ),
               ],
             ),
           ),
           const SizedBox(height: 16),
 
-          // Example Correct
+          // Concrete Examples Card
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.green.withOpacity(0.1),
+              color: Colors.green.withOpacity(0.08),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.green.withOpacity(0.4)),
+              border: Border.all(color: Colors.green.withOpacity(0.3)),
             ),
-            child: Row(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.check_circle_outline, color: Colors.green, size: 22),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Correct Example:",
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.green),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        "\"${widget.unit.exampleCorrect}\"",
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.textPrimary),
-                      ),
-                    ],
-                  ),
+                const Row(
+                  children: [
+                    Icon(Icons.check_circle_outline, color: Colors.green, size: 20),
+                    SizedBox(width: 8),
+                    Text(
+                      "Concrete Examples:",
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.green),
+                    ),
+                  ],
                 ),
+                const SizedBox(height: 8),
+                ...?((gymProvider.activeUnitSimpleExplanation?['examples'] as List?)?.map((ex) => Padding(
+                      padding: const EdgeInsets.only(bottom: 6.0),
+                      child: Text("• \"$ex\"", style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppTheme.textPrimary)),
+                    )) ?? [
+                      Text("• \"${widget.unit.exampleCorrect}\"", style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppTheme.textPrimary)),
+                    ]),
               ],
             ),
           ),
           const SizedBox(height: 12),
 
-          // Common Mistake
+          // Hindi Speaker Tips Card
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.red.withOpacity(0.1),
+              color: Colors.amber.withOpacity(0.1),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.red.withOpacity(0.4)),
+              border: Border.all(color: Colors.amber.withOpacity(0.4)),
             ),
-            child: Row(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.highlight_off, color: Colors.red, size: 22),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Common Mistake to Avoid:",
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.red),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        "\"${widget.unit.exampleCommonMistake}\"",
-                        style: const TextStyle(fontSize: 14, color: AppTheme.textSecondary),
-                      ),
-                    ],
-                  ),
+                const Row(
+                  children: [
+                    Icon(Icons.warning_amber_rounded, color: Colors.amber, size: 20),
+                    SizedBox(width: 8),
+                    Text(
+                      "Tips for Hindi-speaking Learners:",
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.amber),
+                    ),
+                  ],
                 ),
+                const SizedBox(height: 8),
+                ...?((gymProvider.activeUnitSimpleExplanation?['hindi_learner_tips'] as List?)?.map((tip) => Padding(
+                      padding: const EdgeInsets.only(bottom: 6.0),
+                      child: Text("• $tip", style: const TextStyle(fontSize: 13, color: AppTheme.textSecondary)),
+                    )) ?? [
+                      Text("• Common slip to avoid: \"${widget.unit.exampleCommonMistake}\"", style: const TextStyle(fontSize: 13, color: AppTheme.textSecondary)),
+                    ]),
               ],
             ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 24),
 
-          // Start Practice Button
+          // Test Yourself Button
           SizedBox(
             width: double.infinity,
             height: 52,
             child: ElevatedButton(
               onPressed: () {
                 setState(() => _step = 2);
-                widget.gymProvider.startUnitPractice(widget.unit);
+                widget.gymProvider.startUnitPractice(widget.unit, itemCount: 5);
               },
-              child: const Text("Start 4-Item Practice", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              child: const Text("Test Yourself (5 Questions)", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             ),
           ),
         ],
@@ -998,7 +1016,7 @@ class _UnitModalSheetState extends State<_UnitModalSheet> {
             height: 52,
             child: ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(true);
               },
               child: const Text("Return to Learning Path", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             ),

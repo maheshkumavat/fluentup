@@ -319,7 +319,7 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> with Single
                     height: 48,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        Navigator.of(context).pop(true);
                       },
                       child: const Text("Done & Back to Home"),
                     ),
