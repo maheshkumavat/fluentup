@@ -700,6 +700,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                         ),
                         _buildExploreCard(
+                          title: "Real World Missions",
+                          icon: Icons.public,
+                          color: Colors.amber.shade800,
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) => const RealWorldMissionsScreen()),
+                            );
+                          },
+                        ),
+                        _buildExploreCard(
                           title: "Topic Library",
                           icon: Icons.apps,
                           color: Colors.blue.shade700,

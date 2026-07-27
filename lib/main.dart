@@ -10,6 +10,7 @@ import 'providers/progress_provider.dart';
 import 'providers/roadmap_provider.dart';
 import 'providers/practice_call_provider.dart';
 import 'providers/mission_provider.dart';
+import 'providers/real_world_mission_provider.dart';
 import 'services/supabase_service.dart';
 import 'screens/splash_screen.dart';
 import 'screens/auth_screen.dart';
@@ -20,6 +21,7 @@ import 'screens/topic_library_screen.dart';
 import 'screens/describe_image_screen.dart';
 import 'screens/presentation_practice_screen.dart';
 import 'screens/vocabulary_screen.dart';
+import 'screens/real_world_missions_screen.dart';
 import 'theme.dart';
 
 void main() async {
@@ -45,6 +47,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => RoadmapProvider()),
         ChangeNotifierProvider(create: (_) => PracticeCallProvider()),
         ChangeNotifierProvider(create: (_) => MissionProvider()),
+        ChangeNotifierProvider(create: (_) => RealWorldMissionProvider()),
       ],
       child: const MyApp(),
     ),

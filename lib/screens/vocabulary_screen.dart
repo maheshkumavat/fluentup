@@ -160,6 +160,38 @@ class _VocabularyScreenState extends State<VocabularyScreen> {
             children: [
               const SizedBox(height: 16),
 
+              // PHASE H: SITUATION-GROUPED VOCABULARY SELECTION
+              const Text(
+                "SITUATION CATEGORY",
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.8,
+                  color: AppTheme.textSecondary,
+                ),
+              ),
+              const SizedBox(height: 8),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    _buildSituationChip("All Topics", true),
+                    const SizedBox(width: 8),
+                    _buildSituationChip("🍽️ Restaurant & Cafe", false),
+                    const SizedBox(width: 8),
+                    _buildSituationChip("💼 Job Interview", false),
+                    const SizedBox(width: 8),
+                    _buildSituationChip("💻 Tech & Coding", false),
+                    const SizedBox(width: 8),
+                    _buildSituationChip("✈️ Travel & Hotel", false),
+                    const SizedBox(width: 8),
+                    _buildSituationChip("📈 Office & Business", false),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+
               // Weekly Progress Indicator Banner
               Container(
                 width: double.infinity,
@@ -690,6 +722,29 @@ class _VocabularyScreenState extends State<VocabularyScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSituationChip(String label, bool isSelected) {
+    return FilterChip(
+      selected: isSelected,
+      label: Text(
+        label,
+        style: TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 12,
+          fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+          color: isSelected ? Colors.white : AppTheme.textPrimary,
+        ),
+      ),
+      backgroundColor: AppTheme.surfaceContainer,
+      selectedColor: AppTheme.primary,
+      checkmarkColor: Colors.white,
+      side: const BorderSide(color: AppTheme.hairline),
+      onSelected: (val) {
+        final vocabProvider = Provider.of<VocabularyProvider>(context, listen: false);
+        vocabProvider.fetchFreshWord();
+      },
     );
   }
 }

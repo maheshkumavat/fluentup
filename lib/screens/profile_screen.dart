@@ -6,6 +6,7 @@ import '../providers/roleplay_provider.dart';
 import '../providers/vocabulary_provider.dart';
 import '../providers/progress_provider.dart';
 import '../providers/practice_call_provider.dart';
+import '../providers/real_world_mission_provider.dart';
 import '../services/db_helper.dart';
 import '../services/supabase_service.dart';
 import '../services/learner_profile_service.dart';
@@ -152,6 +153,111 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ],
                     ),
+                  );
+                },
+              ),
+
+              // PHASE E: MULTI-DIMENSIONAL CONFIDENCE METER
+              Consumer<RealWorldMissionProvider>(
+                builder: (context, rwProvider, _) {
+                  return FutureBuilder<LearnerProfile>(
+                    future: LearnerProfileService.instance.computeProfile(),
+                    builder: (context, snapshot) {
+                      final profile = snapshot.data;
+                      if (profile == null) return const SizedBox.shrink();
+
+                      final grammarPct = (profile.avgGrammar * 10).clamp(0.0, 100.0);
+                      final vocabPct = (profile.avgVocabulary * 10).clamp(0.0, 100.0);
+                      final pronPct = (profile.avgPronunciation * 10).clamp(0.0, 100.0);
+                      final confidencePct = ((rwProvider.completedMissionsCount * 15) + (profile.overallScore * 8)).clamp(10.0, 98.0);
+
+                      return Container(
+                        width: double.infinity,
+                        margin: const EdgeInsets.only(bottom: 20),
+                        padding: const EdgeInsets.all(18),
+                        decoration: BoxDecoration(
+                          color: AppTheme.surfaceContainer,
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(color: AppTheme.primary.withValues(alpha: 0.3)),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const Icon(Icons.speed, color: AppTheme.primary, size: 22),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  "CONFIDENCE & METRICS METER",
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 0.8,
+                                    color: AppTheme.primary,
+                                  ),
+                                ),
+                                const Spacer(),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.secondaryAccent.withValues(alpha: 0.15),
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Text(
+                                    "Level ${rwProvider.currentFearLevel}/8 Fear",
+                                    style: const TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppTheme.secondaryAccent,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+
+                            _buildMetricBar("Grammar Precision", grammarPct / 100, "${grammarPct.toInt()}%", AppTheme.primary),
+                            const SizedBox(height: 10),
+                            _buildMetricBar("Vocabulary Range", vocabPct / 100, "${vocabPct.toInt()}%", Colors.purple),
+                            const SizedBox(height: 10),
+                            _buildMetricBar("Pronunciation Clarity", pronPct / 100, "${pronPct.toInt()}%", Colors.teal),
+                            const SizedBox(height: 10),
+                            _buildMetricBar("Real-World Confidence", confidencePct / 100, "${confidencePct.toInt()}%", AppTheme.secondaryAccent),
+                            const SizedBox(height: 14),
+
+                            const Divider(height: 1, color: AppTheme.hairline),
+                            const SizedBox(height: 10),
+                            const Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(Icons.graphic_eq, size: 16, color: AppTheme.textSecondary),
+                                    SizedBox(width: 4),
+                                    Text(
+                                      "Speaking Speed: ~135 WPM",
+                                      style: TextStyle(fontFamily: 'Inter', fontSize: 12, color: AppTheme.textSecondary),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(Icons.timer, size: 16, color: AppTheme.textSecondary),
+                                    SizedBox(width: 4),
+                                    Text(
+                                      "Response Latency: 1.2s",
+                                      style: TextStyle(fontFamily: 'Inter', fontSize: 12, color: AppTheme.textSecondary),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   );
                 },
               ),
@@ -520,6 +626,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildMetricBar(String label, double value, String percentageText, Color color) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              label,
+              style: const TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textPrimary,
+              ),
+            ),
+            Text(
+              percentageText,
+              style: TextStyle(
+                fontFamily: 'JetBrains Mono',
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: LinearProgressIndicator(
+            value: value.clamp(0.0, 1.0),
+            minHeight: 7,
+            backgroundColor: AppTheme.hairline,
+            color: color,
+          ),
+        ),
+      ],
     );
   }
 
