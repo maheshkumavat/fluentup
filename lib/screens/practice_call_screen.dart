@@ -11,6 +11,7 @@ import '../providers/roadmap_provider.dart';
 import '../providers/progress_provider.dart';
 import '../theme.dart';
 import '../widgets/coach_avatar.dart';
+import '../services/voice_service.dart';
 import 'feedback_report_screen.dart';
 
 class PracticeCallScreen extends StatefulWidget {
@@ -157,10 +158,9 @@ class _PracticeCallScreenState extends State<PracticeCallScreen> with SingleTick
     callProvider.setIsSpeakingTTS(true);
 
     await _flutterTts.stop();
+    await VoiceService.instance.configureVoiceForPersona(_flutterTts, persona: 'Coach', baseRate: rate);
     await _flutterTts.setLanguage("en-US");
-    await _flutterTts.setSpeechRate(rate);
     await _flutterTts.setVolume(1.0);
-    await _flutterTts.setPitch(1.0);
 
     // Safety fallback timer in case native TTS completion handler is swallowed by OS
     final estimatedSeconds = (text.length / 10).ceil() + 3;

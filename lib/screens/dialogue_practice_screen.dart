@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import '../providers/progress_provider.dart';
 import '../services/supabase_service.dart';
+import '../services/voice_service.dart';
 import '../theme.dart';
 
 class DialogueScript {
@@ -236,9 +237,9 @@ class _DialoguePracticeScreenState extends State<DialoguePracticeScreen> with Si
         _listenProgress = (i + 1) / _currentScript.lines.length;
       });
 
-      // Distinct Pitch: Character A = 1.25, Character B = 0.85
-      final double pitch = line.speaker == 'A' ? 1.25 : 0.85;
-      await _flutterTts.setPitch(pitch);
+      // Distinct Voice & Pitch for Personas
+      final String persona = line.speaker == 'A' ? 'SpeakerA' : 'SpeakerB';
+      await VoiceService.instance.configureVoiceForPersona(_flutterTts, persona: persona);
 
       Completer<void> completer = Completer<void>();
       _flutterTts.setCompletionHandler(() {
