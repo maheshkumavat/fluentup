@@ -397,9 +397,11 @@ class _RealWorldMissionsScreenState extends State<RealWorldMissionsScreen> {
               const SizedBox(height: 8),
 
               if (rwProvider.isLoading)
-                const Center(
+                const Padding(
                   padding: EdgeInsets.symmetric(vertical: 24),
-                  child: CircularProgressIndicator(color: AppTheme.primary),
+                  child: Center(
+                    child: CircularProgressIndicator(color: AppTheme.primary),
+                  ),
                 )
               else
                 ListView.separated(
