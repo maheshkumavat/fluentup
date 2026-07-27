@@ -9,6 +9,7 @@ import 'providers/vocabulary_provider.dart';
 import 'providers/progress_provider.dart';
 import 'providers/roadmap_provider.dart';
 import 'providers/practice_call_provider.dart';
+import 'providers/mission_provider.dart';
 import 'services/supabase_service.dart';
 import 'screens/splash_screen.dart';
 import 'screens/auth_screen.dart';
@@ -43,6 +44,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ProgressProvider()),
         ChangeNotifierProvider(create: (_) => RoadmapProvider()),
         ChangeNotifierProvider(create: (_) => PracticeCallProvider()),
+        ChangeNotifierProvider(create: (_) => MissionProvider()),
       ],
       child: const MyApp(),
     ),
