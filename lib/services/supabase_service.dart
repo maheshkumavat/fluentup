@@ -96,6 +96,23 @@ class SupabaseService {
     await DbHelper.instance.clearUserData();
   }
 
+  Future<void> deleteAccount() async {
+    if (isInitialized && client != null) {
+      try {
+        final response = await client!.functions.invoke(
+          'delete-account',
+          body: {},
+        );
+        if (response.status != 200) {
+          debugPrint("Notice: Edge Function delete-account response: ${response.data}");
+        }
+      } catch (e) {
+        debugPrint("Notice: Edge function delete-account error: $e");
+      }
+    }
+    await signOut();
+  }
+
   static String cleanGroqContent(String rawContent) {
     return rawContent.replaceAll(RegExp(r'<think>[\s\S]*?<\/think>', caseSensitive: false), '').trim();
   }

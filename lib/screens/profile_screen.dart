@@ -554,6 +554,59 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               const SizedBox(height: 24),
 
+              // Danger Zone: Account Deletion
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppTheme.error.withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppTheme.error.withOpacity(0.3)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Row(
+                      children: [
+                        Icon(Icons.warning_amber_rounded, color: AppTheme.error, size: 20),
+                        SizedBox(width: 8),
+                        Text(
+                          "DANGER ZONE",
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.0,
+                            color: AppTheme.error,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      "Permanently delete your account and all associated local and cloud data. This action is irreversible.",
+                      style: TextStyle(fontFamily: 'Inter', fontSize: 12, color: AppTheme.textSecondary),
+                    ),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        icon: const Icon(Icons.delete_forever, color: Colors.white, size: 18),
+                        label: const Text("Delete Account", style: TextStyle(fontWeight: FontWeight.bold)),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppTheme.error,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        ),
+                        onPressed: () => _confirmAccountDeletion(context),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+
               // Level Mastery Banner Card
               Container(
                 width: double.infinity,
@@ -772,5 +825,74 @@ class _ProfileScreenState extends State<ProfileScreen> {
         );
       },
     );
+  }
+
+  void _confirmAccountDeletion(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppTheme.surfaceContainer,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Row(
+          children: [
+            Icon(Icons.warning_amber_rounded, color: AppTheme.error, size: 28),
+            SizedBox(width: 8),
+            Text("Delete Account?", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary)),
+          ],
+        ),
+        content: const Text(
+          "Are you sure you want to delete your account?\n\nThis will permanently delete your user profile, streak, XP progress, practice records, and all local data. This action cannot be undone.",
+          style: TextStyle(fontSize: 14, color: AppTheme.textSecondary, height: 1.4),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text("Cancel", style: TextStyle(color: AppTheme.textSecondary)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppTheme.error,
+              foregroundColor: Colors.white,
+            ),
+            onPressed: () async {
+              Navigator.of(ctx).pop();
+              _executeAccountDeletion(context);
+            },
+            child: const Text("Yes, Delete Permanently"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _executeAccountDeletion(BuildContext context) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => const Center(
+        child: CircularProgressIndicator(color: AppTheme.error),
+      ),
+    );
+
+    final nav = Navigator.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+
+    try {
+      await SupabaseService.instance.deleteAccount();
+      if (mounted) {
+        nav.pop(); // Close loading dialog
+        nav.pushNamedAndRemoveUntil('/auth', (route) => false);
+        messenger.showSnackBar(
+          const SnackBar(content: Text("Your account has been deleted successfully.")),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        nav.pop(); // Close loading dialog
+        messenger.showSnackBar(
+          SnackBar(content: Text("Error deleting account: $e")),
+        );
+      }
+    }
   }
 }
