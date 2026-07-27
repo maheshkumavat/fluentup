@@ -104,6 +104,13 @@ class GymProvider extends ChangeNotifier {
   int get calculatedSessionScore => _calculatedSessionScore;
   String? get sessionErrorMessage => _sessionErrorMessage;
 
+  // Enhanced Explanation State
+  Map<String, dynamic>? _activeUnitSimpleExplanation;
+  bool _isExplanationLoading = false;
+
+  Map<String, dynamic>? get activeUnitSimpleExplanation => _activeUnitSimpleExplanation;
+  bool get isExplanationLoading => _isExplanationLoading;
+
   String? get unlockedCelebrationLevel => _unlockedCelebrationLevel;
   CurriculumUnit? get adaptiveReviewUnit => _adaptiveReviewUnit;
 
@@ -211,7 +218,61 @@ class GymProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> startUnitPractice(CurriculumUnit unit, {int itemCount = 4}) async {
+  Future<void> fetchEnhancedUnitExplanation(CurriculumUnit unit) async {
+    _isExplanationLoading = true;
+    _activeUnitSimpleExplanation = null;
+    notifyListeners();
+
+    try {
+      if (SupabaseService.instance.isInitialized) {
+        final prompt =
+            "You are a friendly, plain-spoken English grammar coach. Explain '${unit.title}' for an English learner.\n"
+            "STRICT RULES:\n"
+            "1. Use simple everyday language. Avoid grammar jargon like 'past participle', 'gerund', or 'clause' (e.g. say 'the word form for completed past events').\n"
+            "2. Provide 3 concrete example sentences showing correct usage.\n"
+            "3. Specifically call out 2 common mistakes Hindi-speaking English learners make for this concept (e.g. article misuse, using 'having', or direct word order translation habits).\n\n"
+            "Respond strictly in JSON object:\n"
+            "{\n"
+            "  \"simple_explanation\": \"2-3 plain language sentences\",\n"
+            "  \"examples\": [\"Example 1\", \"Example 2\", \"Example 3\"],\n"
+            "  \"hindi_learner_tips\": [\"Tip 1 addressing common Hindi speaker mistake\", \"Tip 2 addressing another mistake\"]\n"
+            "}";
+
+        final data = await SupabaseService.instance.invokeGroqProxy({
+          'model': 'openai/gpt-oss-120b',
+          'messages': [
+            {"role": "system", "content": prompt}
+          ],
+          'temperature': 0.4,
+          'response_format': {"type": "json_object"},
+        });
+
+        final replyText = data['choices'][0]['message']['content'] as String;
+        _activeUnitSimpleExplanation = jsonDecode(replyText.trim());
+      }
+    } catch (e) {
+      debugPrint("Groq explanation generation fallback: $e");
+    } finally {
+      if (_activeUnitSimpleExplanation == null) {
+        _activeUnitSimpleExplanation = {
+          "simple_explanation": unit.explanation,
+          "examples": [
+            unit.exampleCorrect,
+            "I practice English for 20 minutes every morning.",
+            "They completed the project on time."
+          ],
+          "hindi_learner_tips": [
+            "Avoid direct translation habits from Hindi sentence order.",
+            "Watch out for common mistake: '${unit.exampleCommonMistake}'"
+          ]
+        };
+      }
+      _isExplanationLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> startUnitPractice(CurriculumUnit unit, {int itemCount = 5}) async {
     _activeUnit = unit;
     _currentItemIndex = 0;
     _sessionCorrectCount = 0;
@@ -225,40 +286,49 @@ class GymProvider extends ChangeNotifier {
     try {
       final items = <PracticeItem>[];
 
-      for (int i = 0; i < itemCount; i++) {
-        final isSpoken = (i == itemCount - 1); // Last item is spoken open-ended
-        final expects = isSpoken ? 'spoken' : 'typed';
+      if (SupabaseService.instance.isInitialized) {
+        try {
+          final systemPrompt =
+              "Generate 5 short practice test questions for '${unit.title}' (${unit.explanation}) for a ${unit.level} English learner. "
+              "Questions 1-2: Fill-in-the-blank sentence. Questions 3-4: 'Is this sentence correct?' (True/False or fix the mistake). Question 5: Spoken practice sentence. "
+              "Respond strictly in JSON: {\"questions\": [{\"prompt\": \"...\", \"expects\": \"typed\"}, ..., {\"prompt\": \"...\", \"expects\": \"spoken\"}]}.";
 
-        if (SupabaseService.instance.isInitialized) {
-          try {
-            final systemPrompt =
-                "Generate ONE short practice sentence exercise testing this grammar point: '${unit.title}' (${unit.explanation}). "
-                "Make it about a realistic everyday or professional topic, appropriate for a ${unit.level} English learner. "
-                "Respond in JSON: {\"prompt\": \"...\", \"expects\": \"$expects\"}. Never use emojis, plain text JSON only.";
+          final data = await SupabaseService.instance.invokeGroqProxy({
+            'model': 'openai/gpt-oss-120b',
+            'messages': [
+              {"role": "system", "content": systemPrompt}
+            ],
+            'temperature': 0.7,
+            'response_format': {"type": "json_object"},
+          });
 
-            final data = await SupabaseService.instance.invokeGroqProxy({
-              'model': 'openai/gpt-oss-120b',
-              'messages': [
-                {"role": "system", "content": systemPrompt}
-              ],
-              'temperature': 0.7,
-              'response_format': {"type": "json_object"},
-            });
-
-            final replyText = data['choices'][0]['message']['content'] as String;
-            final parsed = jsonDecode(replyText.trim());
-            items.add(PracticeItem(
-              prompt: parsed['prompt'] ?? "Complete sentence testing ${unit.title}:",
-              expects: expects,
-            ));
-            continue;
-          } catch (e) {
-            debugPrint("Groq item generation fallback: $e");
+          final replyText = data['choices'][0]['message']['content'] as String;
+          final parsed = jsonDecode(replyText.trim());
+          List qList = [];
+          if (parsed is Map && parsed.containsKey('questions')) {
+            qList = parsed['questions'] as List;
+          } else if (parsed is List) {
+            qList = parsed;
           }
-        }
 
-        // Fallback item if API fails
-        items.add(_generateFallbackItem(unit, isSpoken: isSpoken, index: i));
+          for (int i = 0; i < qList.length; i++) {
+            final q = qList[i] as Map;
+            final isLast = (i == qList.length - 1);
+            items.add(PracticeItem(
+              prompt: q['prompt'] ?? "Question ${i + 1} for ${unit.title}:",
+              expects: isLast ? 'spoken' : (q['expects'] ?? 'typed'),
+            ));
+          }
+        } catch (e) {
+          debugPrint("Groq test questions batch fallback: $e");
+        }
+      }
+
+      if (items.isEmpty) {
+        for (int i = 0; i < itemCount; i++) {
+          final isSpoken = (i == itemCount - 1);
+          items.add(_generateFallbackItem(unit, isSpoken: isSpoken, index: i));
+        }
       }
 
       _activeItems = items;
