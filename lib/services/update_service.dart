@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
+import '../main.dart';
 import '../theme.dart';
 import '../widgets/tactile_button.dart';
 import 'supabase_service.dart';
@@ -65,27 +66,34 @@ class UpdateService {
 
       if (isNewer && downloadUrl != null) {
         debugPrint("[UpdateService] New update detected! Showing bottom sheet update prompt.");
-        if (context.mounted) {
-          _showUpdateBottomSheet(context, tagName, body, downloadUrl);
+        final activeContext = context.mounted ? context : navigatorKey.currentContext;
+        if (activeContext != null && activeContext.mounted) {
+          _showUpdateBottomSheet(activeContext, tagName, body, downloadUrl);
         }
-      } else if (showNoUpdateToast && context.mounted) {
-        debugPrint("[UpdateService] No update required or already on latest version.");
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("You are on the latest version of FluentUp."),
-            duration: Duration(seconds: 2),
-          ),
-        );
+      } else if (showNoUpdateToast) {
+        final activeContext = context.mounted ? context : navigatorKey.currentContext;
+        if (activeContext != null && activeContext.mounted) {
+          debugPrint("[UpdateService] No update required or already on latest version.");
+          ScaffoldMessenger.of(activeContext).showSnackBar(
+            const SnackBar(
+              content: Text("You are on the latest version of FluentUp."),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
       }
     } catch (e) {
       debugPrint("[UpdateService] Error checking for update: $e");
-      if (showNoUpdateToast && context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Unable to check for updates: $e"),
-            duration: const Duration(seconds: 3),
-          ),
-        );
+      if (showNoUpdateToast) {
+        final activeContext = context.mounted ? context : navigatorKey.currentContext;
+        if (activeContext != null && activeContext.mounted) {
+          ScaffoldMessenger.of(activeContext).showSnackBar(
+            SnackBar(
+              content: Text("Unable to check for updates: $e"),
+              duration: const Duration(seconds: 3),
+            ),
+          );
+        }
       }
     } finally {
       _isChecking = false;

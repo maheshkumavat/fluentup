@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/chat_provider.dart';
 import '../services/supabase_service.dart';
+import '../services/update_service.dart';
 import '../theme.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -25,6 +26,11 @@ class _SplashScreenState extends State<SplashScreen> {
           _translateY = 0.0;
         });
       }
+    });
+
+    // Run in-app update check at earliest app launch point (before auth/onboarding/home routing decision)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      UpdateService.instance.checkForUpdates(context);
     });
 
     _navigateToNext();
