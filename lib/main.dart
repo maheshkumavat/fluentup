@@ -22,6 +22,7 @@ import 'screens/describe_image_screen.dart';
 import 'screens/presentation_practice_screen.dart';
 import 'screens/vocabulary_screen.dart';
 import 'screens/real_world_missions_screen.dart';
+import 'screens/sound_practice_screen.dart';
 import 'theme.dart';
 
 void main() async {
@@ -74,6 +75,7 @@ class MyApp extends StatelessWidget {
         '/describe-image': (context) => const DescribeImageScreen(),
         '/presentation-practice': (context) => const PresentationPracticeScreen(),
         '/vocabulary': (context) => const VocabularyScreen(),
+        '/sound-practice': (context) => const SoundPracticeScreen(),
       },
     );
   }

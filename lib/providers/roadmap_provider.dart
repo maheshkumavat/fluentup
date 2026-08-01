@@ -45,31 +45,31 @@ class RoadmapProvider extends ChangeNotifier {
     },
     {
       "day_number": 2,
+      "title": "Target Sound Practice",
+      "description": "Sound Practice: Master tricky consonant & vowel pronunciations.",
+      "activity_type": "sound",
+      "target_topic_id": "sound",
+    },
+    {
+      "day_number": 3,
       "title": "Past Tense Precision",
       "description": "Grammar Gym: Master past simple vs present perfect structures.",
       "activity_type": "gym",
       "target_topic_id": "past",
     },
     {
-      "day_number": 3,
+      "day_number": 4,
       "title": "Job Interview Warmup",
       "description": "Voice practice: Answer introduction & background questions.",
       "activity_type": "call",
       "target_topic_id": "pro_1",
     },
     {
-      "day_number": 4,
+      "day_number": 5,
       "title": "High-Impact Vocabulary",
       "description": "Vocabulary: Master 5 new workplace terms with real-world context.",
       "activity_type": "vocab",
       "target_topic_id": "vocab",
-    },
-    {
-      "day_number": 5,
-      "title": "Project Status Update",
-      "description": "Voice practice: Deliver a progress report on your current project.",
-      "activity_type": "call",
-      "target_topic_id": "pro_3",
     },
   ];
 
@@ -196,7 +196,7 @@ class RoadmapProvider extends ChangeNotifier {
           "    \"day_number\": $startDay,\n"
           "    \"title\": \"Short catchy title\",\n"
           "    \"description\": \"1 sentence description\",\n"
-          "    \"activity_type\": \"call/gym/vocab/roleplay/code\",\n"
+          "    \"activity_type\": \"call/gym/vocab/roleplay/code/sound\",\n"
           "    \"target_topic_id\": \"dl_1 or pro_1 or past or vocab\"\n"
           "  }\n"
           "]";

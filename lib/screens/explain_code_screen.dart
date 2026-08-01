@@ -5,6 +5,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../providers/code_explanation_provider.dart';
 import '../providers/chat_provider.dart';
+import '../services/tts_service.dart';
 import '../theme.dart';
 
 class ExplainCodeScreen extends StatefulWidget {
@@ -51,7 +52,7 @@ class _ExplainCodeScreenState extends State<ExplainCodeScreen> {
     _codeController.dispose();
     _explanationController.dispose();
     _speech.stop();
-    _flutterTts.stop();
+    TtsService.instance.stop();
     super.dispose();
   }
 
@@ -138,14 +139,13 @@ class _ExplainCodeScreenState extends State<ExplainCodeScreen> {
 
   Future<void> _speak(String text) async {
     final chatProvider = Provider.of<ChatProvider>(context, listen: false);
-    final rate = chatProvider.speakingSpeed == 'slow' ? 0.3 : 0.5;
+    final isSlow = chatProvider.speakingSpeed == 'slow';
 
-    await _flutterTts.stop();
-    await _flutterTts.setLanguage("en-US");
-    await _flutterTts.setSpeechRate(rate);
-    await _flutterTts.setVolume(1.0);
-    await _flutterTts.setPitch(1.0);
-    await _flutterTts.speak(text);
+    await TtsService.instance.stop();
+    await TtsService.instance.speak(
+      text,
+      rate: isSlow ? "-15%" : "+0%",
+    );
   }
 
   void _submitEvaluation(CodeExplanationProvider provider) async {

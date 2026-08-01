@@ -12,6 +12,7 @@ import '../providers/progress_provider.dart';
 import '../theme.dart';
 import '../widgets/coach_avatar.dart';
 import '../services/voice_service.dart';
+import '../services/tts_service.dart';
 import 'feedback_report_screen.dart';
 
 class PracticeCallScreen extends StatefulWidget {
@@ -142,7 +143,7 @@ class _PracticeCallScreenState extends State<PracticeCallScreen> with SingleTick
     _disableScreenProtection();
     _pulseController.dispose();
     _speech.stop();
-    _flutterTts.stop();
+    TtsService.instance.stop();
     super.dispose();
   }
 
@@ -151,28 +152,25 @@ class _PracticeCallScreenState extends State<PracticeCallScreen> with SingleTick
     final chatProvider = Provider.of<ChatProvider>(context, listen: false);
     final callProvider = Provider.of<PracticeCallProvider>(context, listen: false);
 
-    final rate = chatProvider.speakingSpeed == 'slow' ? 0.35 : 0.48;
+    final isSlow = chatProvider.speakingSpeed == 'slow';
 
     debugPrint("[PracticeCall] TTS Speaking: '$text'");
     setState(() => _isSpeaking = true);
     callProvider.setIsSpeakingTTS(true);
 
-    await _flutterTts.stop();
-    await VoiceService.instance.configureVoiceForPersona(_flutterTts, persona: 'Coach', baseRate: rate);
-    await _flutterTts.setLanguage("en-US");
-    await _flutterTts.setVolume(1.0);
-
-    // Safety fallback timer in case native TTS completion handler is swallowed by OS
-    final estimatedSeconds = (text.length / 10).ceil() + 3;
-    Future.delayed(Duration(seconds: estimatedSeconds), () {
-      if (mounted && _isSpeaking) {
-        debugPrint("[PracticeCall] Safety TTS timeout reached ($estimatedSeconds s). Resetting _isSpeaking to false.");
+    TtsService.instance.setCompletionHandler(() {
+      if (mounted) {
         setState(() => _isSpeaking = false);
         callProvider.setIsSpeakingTTS(false);
       }
     });
 
-    await _flutterTts.speak(text);
+    final coachName = callProvider.coachName;
+    await TtsService.instance.speak(
+      text,
+      personaName: coachName,
+      rate: isSlow ? "-15%" : "+0%",
+    );
   }
 
   Future<void> _toggleMicListening() async {

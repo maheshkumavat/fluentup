@@ -25,6 +25,7 @@ import 'roleplay_screen.dart';
 import 'topic_library_screen.dart';
 import 'vocabulary_screen.dart';
 import 'real_world_missions_screen.dart';
+import 'sound_practice_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -101,6 +102,11 @@ class _HomeScreenState extends State<HomeScreen> {
       case 'review':
         completed = await Navigator.of(context).push<bool>(
           MaterialPageRoute(builder: (context) => const GrammarGymScreen()),
+        );
+        break;
+      case 'sound':
+        completed = await Navigator.of(context).push<bool>(
+          MaterialPageRoute(builder: (context) => const SoundPracticeScreen()),
         );
         break;
       default:
@@ -690,6 +696,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(builder: (context) => const VocabularyScreen()),
+                          );
+                        },
+                      ),
+                      _buildExploreCard(
+                        title: "Sound Practice",
+                        icon: Icons.graphic_eq,
+                        color: Colors.teal.shade700,
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => const SoundPracticeScreen()),
                           );
                         },
                       ),

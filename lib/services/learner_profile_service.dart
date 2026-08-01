@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'db_helper.dart';
+import 'supabase_service.dart';
 
 class LearnerProfile {
   final String userName;
@@ -15,6 +16,14 @@ class LearnerProfile {
   final String levelSummary;
   final Map<String, String> recommendedTopic;
 
+  // New onboarding profile fields
+  final String nativeLanguage;
+  final String interfaceLanguage;
+  final String acquisitionSource;
+  final String customGoal;
+  final String selfReportedLevel;
+  final double readingAccuracyPct;
+
   const LearnerProfile({
     required this.userName,
     required this.learningGoal,
@@ -28,6 +37,12 @@ class LearnerProfile {
     required this.recentFillerWordCounts,
     required this.levelSummary,
     required this.recommendedTopic,
+    this.nativeLanguage = 'English',
+    this.interfaceLanguage = 'English',
+    this.acquisitionSource = 'Other',
+    this.customGoal = '',
+    this.selfReportedLevel = 'Intermediate',
+    this.readingAccuracyPct = 85.0,
   });
 }
 
@@ -36,14 +51,35 @@ class LearnerProfileService {
   static LearnerProfileService get instance => _instance;
   LearnerProfileService._internal();
 
+  /// Returns bilingual Groq prompt instruction if user chose a non-English interface language
+  Future<String> getBilingualInstruction() async {
+    final userId = SupabaseService.instance.currentUserId;
+    final lang = (userId != null && userId.isNotEmpty)
+        ? await DbHelper.instance.getSetting('interface_language_$userId') ?? await DbHelper.instance.getSetting('interface_language')
+        : await DbHelper.instance.getSetting('interface_language');
+
+    if (lang != null && lang.isNotEmpty && lang.toLowerCase() != 'english') {
+      return " First give the explanation in simple English, then repeat the same explanation in $lang.";
+    }
+    return "";
+  }
+
   /// Computes the LearnerProfile fresh on read from SQLite history
   Future<LearnerProfile> computeProfile() async {
     try {
       final db = DbHelper.instance;
+      final userId = SupabaseService.instance.currentUserId ?? '';
 
-      // 0. Fetch User Name & Learning Goal
-      final userName = await db.getSetting('user_name') ?? 'Learner';
-      final learningGoal = await db.getSetting('learning_goal') ?? 'Daily conversation confidence';
+      // 0. Fetch User Profile Settings
+      final userName = (userId.isNotEmpty ? await db.getSetting('user_name_$userId') : null) ?? await db.getSetting('user_name') ?? 'Learner';
+      final learningGoal = (userId.isNotEmpty ? await db.getSetting('learning_goal_$userId') : null) ?? await db.getSetting('learning_goal') ?? 'Daily conversation confidence';
+      final nativeLang = (userId.isNotEmpty ? await db.getSetting('native_language_$userId') : null) ?? await db.getSetting('native_language') ?? 'English';
+      final interfaceLang = (userId.isNotEmpty ? await db.getSetting('interface_language_$userId') : null) ?? await db.getSetting('interface_language') ?? 'English';
+      final acqSource = (userId.isNotEmpty ? await db.getSetting('acquisition_source_$userId') : null) ?? await db.getSetting('acquisition_source') ?? 'Other';
+      final custGoal = (userId.isNotEmpty ? await db.getSetting('custom_goal_$userId') : null) ?? await db.getSetting('custom_goal') ?? '';
+      final selfLevel = (userId.isNotEmpty ? await db.getSetting('self_reported_level_$userId') : null) ?? await db.getSetting('self_reported_level') ?? 'Intermediate';
+      final readingAccuracyStr = (userId.isNotEmpty ? await db.getSetting('reading_accuracy_pct_$userId') : null) ?? await db.getSetting('reading_accuracy_pct') ?? '85';
+      final readingAcc = double.tryParse(readingAccuracyStr) ?? 85.0;
 
       // 1. Determine CEFR Level
       String cefr = 'B1';
@@ -51,7 +87,7 @@ class LearnerProfileService {
       if (assessment != null && assessment['placement_level'] != null) {
         cefr = assessment['placement_level'] as String;
       } else {
-        final savedLevel = await db.getSetting('user_cefr_level');
+        final savedLevel = (userId.isNotEmpty ? await db.getSetting('user_cefr_level_$userId') : null) ?? await db.getSetting('user_cefr_level');
         if (savedLevel != null && savedLevel.isNotEmpty) {
           cefr = savedLevel;
         }
@@ -92,6 +128,13 @@ class LearnerProfileService {
         fillerCounts.addAll([2, 1, 3]);
       }
 
+      // Check real Sound Practice pronunciation attempts for Pronunciation Clarity % calculation
+      final avgSoundScore = await db.getAveragePronunciationScore(userId);
+      if (avgSoundScore != null) {
+        // Blend or use real sound practice average (sound score is out of 100, scale to 0-10)
+        totalPron = (avgSoundScore / 10.0).clamp(1.0, 10.0);
+      }
+
       // 3. Compute Weakest Grammar Category
       String weakestCat = 'past_tense';
       int maxMistakes = -1;
@@ -130,6 +173,12 @@ class LearnerProfileService {
         recentFillerWordCounts: fillerCounts.take(3).toList(),
         levelSummary: levelSummary,
         recommendedTopic: topic,
+        nativeLanguage: nativeLang,
+        interfaceLanguage: interfaceLang,
+        acquisitionSource: acqSource,
+        customGoal: custGoal,
+        selfReportedLevel: selfLevel,
+        readingAccuracyPct: readingAcc,
       );
     } catch (e) {
       debugPrint("Error computing LearnerProfile: $e");

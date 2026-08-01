@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../providers/progress_provider.dart';
 import '../services/supabase_service.dart';
 import '../services/voice_service.dart';
+import '../services/tts_service.dart';
 import '../theme.dart';
 
 class DialogueScript {
@@ -237,16 +238,17 @@ class _DialoguePracticeScreenState extends State<DialoguePracticeScreen> with Si
         _listenProgress = (i + 1) / _currentScript.lines.length;
       });
 
-      // Distinct Voice & Pitch for Personas
-      final String persona = line.speaker == 'A' ? 'SpeakerA' : 'SpeakerB';
-      await VoiceService.instance.configureVoiceForPersona(_flutterTts, persona: persona);
-
+      final bool isB = line.speaker == 'B';
       Completer<void> completer = Completer<void>();
-      _flutterTts.setCompletionHandler(() {
+      TtsService.instance.setCompletionHandler(() {
         if (!completer.isCompleted) completer.complete();
       });
 
-      await _flutterTts.speak(line.text);
+      await TtsService.instance.speak(
+        line.text,
+        personaName: isB ? 'CharacterB' : 'CharacterA',
+        isDialogueCharacterB: isB,
+      );
       await completer.future;
       await Future.delayed(const Duration(milliseconds: 300));
     }
@@ -342,11 +344,8 @@ class _DialoguePracticeScreenState extends State<DialoguePracticeScreen> with Si
         _userPracticeTranscribed = "";
       });
 
-      final double pitch = line.speaker == 'A' ? 1.25 : 0.85;
-      await _flutterTts.setPitch(pitch);
-      await _flutterTts.speak(line.text);
-
-      _flutterTts.setCompletionHandler(() {
+      final bool isB = line.speaker == 'B';
+      TtsService.instance.setCompletionHandler(() {
         if (mounted) {
           setState(() {
             _isSpeakingPartner = false;
@@ -355,6 +354,11 @@ class _DialoguePracticeScreenState extends State<DialoguePracticeScreen> with Si
           _triggerCurrentPracticeTurn();
         }
       });
+      await TtsService.instance.speak(
+        line.text,
+        personaName: isB ? 'CharacterB' : 'CharacterA',
+        isDialogueCharacterB: isB,
+      );
     } else {
       // User Turn
       setState(() {

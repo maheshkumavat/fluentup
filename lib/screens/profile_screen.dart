@@ -11,6 +11,7 @@ import '../services/db_helper.dart';
 import '../services/supabase_service.dart';
 import '../services/learner_profile_service.dart';
 import '../services/update_service.dart';
+import '../widgets/level_ladder.dart';
 import '../theme.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -156,6 +157,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   );
                 },
               ),
+              const SizedBox(height: 16),
+              FutureBuilder<LearnerProfile>(
+                future: LearnerProfileService.instance.computeProfile(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) return const SizedBox.shrink();
+                  return LevelLadder(currentCefrLevel: snapshot.data!.cefrLevel, compact: true);
+                },
+              ),
+              const SizedBox(height: 20),
 
               // PHASE E: MULTI-DIMENSIONAL CONFIDENCE METER
               Consumer<RealWorldMissionProvider>(

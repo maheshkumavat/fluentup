@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../services/db_helper.dart';
+import '../services/learner_profile_service.dart';
 import '../services/supabase_service.dart';
 
 class CurriculumUnit {
@@ -270,17 +271,15 @@ class GymProvider extends ChangeNotifier {
     final stopwatch = Stopwatch()..start();
     try {
       if (SupabaseService.instance.isInitialized) {
+        final bilingualSuffix = await LearnerProfileService.instance.getBilingualInstruction();
         final prompt =
-            "You are a friendly, plain-spoken English grammar coach. Explain '${unit.title}' for an English learner.\n"
-            "STRICT RULES:\n"
-            "1. Use simple everyday language. Avoid grammar jargon like 'past participle', 'gerund', or 'clause' (e.g. say 'the word form for completed past events').\n"
-            "2. Provide 3 concrete example sentences showing correct usage.\n"
-            "3. Specifically call out 2 common mistakes Hindi-speaking English learners make for this concept (e.g. article misuse, using 'having', or direct word order translation habits).\n\n"
-            "Respond strictly in JSON object:\n"
+            "Provide a simple, clear grammar explanation for '${unit.title}' (${unit.explanation}) for a ${unit.level} English learner.$bilingualSuffix\n"
+            "Include 2-3 plain language sentences, 3 clear example sentences, and 2 specific tips addressing common mistakes for learners from non-English backgrounds.\n"
+            "Respond strictly in JSON object format:\n"
             "{\n"
             "  \"simple_explanation\": \"2-3 plain language sentences\",\n"
             "  \"examples\": [\"Example 1\", \"Example 2\", \"Example 3\"],\n"
-            "  \"hindi_learner_tips\": [\"Tip 1 addressing common Hindi speaker mistake\", \"Tip 2 addressing another mistake\"]\n"
+            "  \"hindi_learner_tips\": [\"Tip 1 addressing common mistakes\", \"Tip 2 addressing another mistake\"]\n"
             "}";
 
         final data = await SupabaseService.instance.invokeGroqProxy({

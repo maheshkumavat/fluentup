@@ -20,7 +20,7 @@ class DbHelper {
 
     return await openDatabase(
       path,
-      version: 12,
+      version: 13,
       onCreate: _createDB,
       onUpgrade: _onUpgrade,
     );
@@ -169,6 +169,27 @@ class DbHelper {
         note_text TEXT NOT NULL,
         updated_at TEXT NOT NULL,
         UNIQUE(unit_id, user_id)
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE onboarding_progress (
+        user_id TEXT PRIMARY KEY,
+        current_step INTEGER NOT NULL,
+        completed INTEGER NOT NULL DEFAULT 0,
+        state_json TEXT
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE pronunciation_attempts (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id TEXT NOT NULL,
+        word TEXT NOT NULL,
+        tricky_sound TEXT NOT NULL,
+        score INTEGER NOT NULL,
+        attempt_number INTEGER NOT NULL,
+        date TEXT NOT NULL
       )
     ''');
   }
@@ -324,6 +345,106 @@ class DbHelper {
         )
       ''');
     }
+    if (oldVersion < 13) {
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS onboarding_progress (
+          user_id TEXT PRIMARY KEY,
+          current_step INTEGER NOT NULL,
+          completed INTEGER NOT NULL DEFAULT 0,
+          state_json TEXT
+        )
+      ''');
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS pronunciation_attempts (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          user_id TEXT NOT NULL,
+          word TEXT NOT NULL,
+          tricky_sound TEXT NOT NULL,
+          score INTEGER NOT NULL,
+          attempt_number INTEGER NOT NULL,
+          date TEXT NOT NULL
+        )
+      ''');
+    }
+  }
+
+  // Onboarding Progress CRUD
+  Future<void> saveOnboardingProgress(String userId, int step, bool completed, String stateJson) async {
+    final db = await instance.database;
+    await db.insert(
+      'onboarding_progress',
+      {
+        'user_id': userId,
+        'current_step': step,
+        'completed': completed ? 1 : 0,
+        'state_json': stateJson,
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<Map<String, dynamic>?> getOnboardingProgress(String userId) async {
+    final db = await instance.database;
+    final res = await db.query(
+      'onboarding_progress',
+      where: 'user_id = ?',
+      whereArgs: [userId],
+    );
+    if (res.isNotEmpty) {
+      return res.first;
+    }
+    return null;
+  }
+
+  Future<void> clearOnboardingProgress(String userId) async {
+    final db = await instance.database;
+    await db.delete(
+      'onboarding_progress',
+      where: 'user_id = ?',
+      whereArgs: [userId],
+    );
+  }
+
+  // Pronunciation Attempts CRUD
+  Future<int> insertPronunciationAttempt({
+    required String userId,
+    required String word,
+    required String trickySound,
+    required int score,
+    required int attemptNumber,
+    required String date,
+  }) async {
+    final db = await instance.database;
+    return await db.insert('pronunciation_attempts', {
+      'user_id': userId,
+      'word': word,
+      'tricky_sound': trickySound,
+      'score': score,
+      'attempt_number': attemptNumber,
+      'date': date,
+    });
+  }
+
+  Future<List<Map<String, dynamic>>> getPronunciationAttempts(String userId) async {
+    final db = await instance.database;
+    return await db.query(
+      'pronunciation_attempts',
+      where: 'user_id = ?',
+      whereArgs: [userId],
+      orderBy: 'id DESC',
+    );
+  }
+
+  Future<double?> getAveragePronunciationScore(String userId) async {
+    final db = await instance.database;
+    final res = await db.rawQuery(
+      'SELECT AVG(score) as avg_score FROM pronunciation_attempts WHERE user_id = ?',
+      [userId],
+    );
+    if (res.isNotEmpty && res.first['avg_score'] != null) {
+      return (res.first['avg_score'] as num).toDouble();
+    }
+    return null;
   }
 
   // Messages CRUD

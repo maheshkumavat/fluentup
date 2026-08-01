@@ -99,7 +99,7 @@ class MissionProvider extends ChangeNotifier {
               "Generate a 5-item daily English learning mission for a ${profile.cefrLevel} learner. "
               "Learner goal: ${profile.learningGoal}. Weakest area: ${profile.weakestGrammarCategory}. "
               "Output JSON array with 5 objects containing keys: "
-              "\"id\", \"type\" (must be one of: \"lesson\", \"practice\", \"conversation\", \"challenge\", \"review\"), "
+              "\"id\", \"type\" (must be one of: \"lesson\", \"practice\", \"conversation\", \"challenge\", \"review\", \"sound\"), "
               "\"title\", \"subtitle\", \"xpReward\" (25-40). "
               "Return raw JSON array only.";
 

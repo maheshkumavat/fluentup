@@ -5,7 +5,7 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:permission_handler/permission_handler.dart';
 import '../theme.dart';
 import '../services/supabase_service.dart';
-import '../services/voice_service.dart';
+import '../services/tts_service.dart';
 import 'coach_avatar.dart';
 
 class FloatingAssistantWidget extends StatefulWidget {
@@ -234,7 +234,7 @@ class _DoubtAssistantSheetState extends State<DoubtAssistantSheet> {
 
   Future<void> _speakReply(String replyText) async {
     try {
-      await _tts.stop();
+      await TtsService.instance.stop();
 
       // Language Auto-Detection Query via Groq or Locale matcher
       String detectedLang = 'en-US';
@@ -261,15 +261,16 @@ class _DoubtAssistantSheetState extends State<DoubtAssistantSheet> {
         }
       } catch (_) {}
 
-      await _tts.setLanguage(detectedLang);
-      await VoiceService.instance.configureVoiceForPersona(_tts, persona: 'Coach');
       setState(() => _isSpeakingTts = true);
 
-      _tts.setCompletionHandler(() {
+      TtsService.instance.setCompletionHandler(() {
         if (mounted) setState(() => _isSpeakingTts = false);
       });
 
-      await _tts.speak(replyText);
+      await TtsService.instance.speak(
+        replyText,
+        language: detectedLang,
+      );
     } catch (e) {
       debugPrint("Notice speaking floating assistant reply: $e");
     }

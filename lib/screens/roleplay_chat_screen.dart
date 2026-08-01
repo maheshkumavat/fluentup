@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../providers/roleplay_provider.dart';
 import '../providers/chat_provider.dart';
 import '../providers/progress_provider.dart';
+import '../services/tts_service.dart';
 import 'roleplay_report_screen.dart';
 import '../theme.dart';
 
@@ -22,14 +22,13 @@ class _RoleplayChatScreenState extends State<RoleplayChatScreen> {
   
   final stt.SpeechToText _speech = stt.SpeechToText();
   bool _isListening = false;
-  final FlutterTts _flutterTts = FlutterTts();
 
   @override
   void dispose() {
     _messageController.dispose();
     _scrollController.dispose();
     _speech.stop();
-    _flutterTts.stop();
+    TtsService.instance.stop();
     super.dispose();
   }
 
@@ -151,13 +150,7 @@ class _RoleplayChatScreenState extends State<RoleplayChatScreen> {
 
   Future<void> _speak(String text) async {
     final chatProvider = Provider.of<ChatProvider>(context, listen: false);
-    final rate = chatProvider.speakingSpeed == 'slow' ? 0.3 : 0.5;
-
-    await _flutterTts.stop();
-    await _flutterTts.setLanguage("en-US");
-    await _flutterTts.setSpeechRate(rate);
-    await _flutterTts.setVolume(1.0);
-    await _flutterTts.setPitch(1.0);
+    final isSlow = chatProvider.speakingSpeed == 'slow';
 
     String speakText = text;
     if (text.contains('[Correction:]')) {
@@ -165,7 +158,11 @@ class _RoleplayChatScreenState extends State<RoleplayChatScreen> {
       speakText = text.substring(0, index).trim();
     }
 
-    await _flutterTts.speak(speakText);
+    await TtsService.instance.stop();
+    await TtsService.instance.speak(
+      speakText,
+      rate: isSlow ? "-15%" : "+0%",
+    );
   }
 
   void _finishSession(RoleplayProvider roleplayProvider) async {

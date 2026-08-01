@@ -7,6 +7,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../providers/vocabulary_provider.dart';
 import '../providers/chat_provider.dart';
 import '../providers/progress_provider.dart';
+import '../services/tts_service.dart';
 import '../theme.dart';
 
 class VocabularyScreen extends StatefulWidget {
@@ -35,7 +36,7 @@ class _VocabularyScreenState extends State<VocabularyScreen> {
   void dispose() {
     _sentenceController.dispose();
     _speech.stop();
-    _flutterTts.stop();
+    TtsService.instance.stop();
     super.dispose();
   }
 
