@@ -28,31 +28,55 @@ class _SplashScreenState extends State<SplashScreen> {
       }
     });
 
-    // Run in-app update check at earliest app launch point (before auth/onboarding/home routing decision)
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      UpdateService.instance.checkForUpdates(context);
-    });
-
-    _navigateToNext();
+    // Run cold-start update check FIRST before auth/onboarding/home routing decision
+    _runStartupSequence();
   }
 
-  Future<void> _navigateToNext() async {
-    await Future.delayed(const Duration(milliseconds: 1800));
+  Future<void> _runStartupSequence() async {
+    debugPrint("[Splash] Checking for updates...");
+
+    bool isAvailable = false;
+    try {
+      isAvailable = await UpdateService.instance.checkForUpdates(context).timeout(
+        const Duration(seconds: 3),
+        onTimeout: () {
+          debugPrint("[Splash] Update check timed out after 3 seconds");
+          return false;
+        },
+      );
+    } catch (e) {
+      debugPrint("[Splash] Update check error: $e");
+      isAvailable = false;
+    }
+
+    debugPrint("[Splash] Update check result: ${isAvailable ? 'available' : 'not available'}");
+
     if (!mounted) return;
 
+    // Brief delay to ensure splash animation is visible if check completes fast
+    await Future.delayed(const Duration(milliseconds: 800));
+    if (!mounted) return;
+
+    // Evaluate Auth & Onboarding state AFTER update check
     final chatProvider = Provider.of<ChatProvider>(context, listen: false);
     final isCompleted = await chatProvider.isOnboardingCompleted();
     final isLoggedIn = SupabaseService.instance.isLoggedIn;
 
-    if (mounted) {
-      if (!isLoggedIn) {
-        Navigator.pushReplacementNamed(context, '/auth');
+    String routeName = '/auth';
+    String routeLog = 'Auth';
+    if (isLoggedIn) {
+      if (isCompleted) {
+        routeName = '/home';
+        routeLog = 'Home';
       } else {
-        Navigator.pushReplacementNamed(
-          context,
-          isCompleted ? '/home' : '/onboarding',
-        );
+        routeName = '/onboarding';
+        routeLog = 'Onboarding';
       }
+    }
+
+    debugPrint("[Splash] Proceeding to route: $routeLog");
+    if (mounted) {
+      Navigator.pushReplacementNamed(context, routeName);
     }
   }
 

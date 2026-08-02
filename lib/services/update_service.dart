@@ -18,10 +18,12 @@ class UpdateService {
   String repoName = "fluentup";
   bool _isChecking = false;
 
-  /// Checks GitHub releases API for a newer tag version
-  Future<void> checkForUpdates(BuildContext context, {bool showNoUpdateToast = false}) async {
-    if (_isChecking) return;
+  /// Checks GitHub releases API for a newer tag version.
+  /// Returns true if an update was detected (and prompt shown), false otherwise.
+  Future<bool> checkForUpdates(BuildContext context, {bool showNoUpdateToast = false, bool forceMockUpdate = false}) async {
+    if (_isChecking) return false;
     _isChecking = true;
+    bool updateFound = false;
 
     try {
       final packageInfo = await PackageInfo.fromPlatform();
@@ -61,14 +63,16 @@ class UpdateService {
         }
       }
 
-      final isNewer = _isNewerVersion(tagName, currentVersion, currentBuild);
-      debugPrint("[UpdateService] Comparison -> Installed: '$currentVersion+$currentBuild' | GitHub Tag: '$tagName' | isNewer: $isNewer | downloadUrl: '$downloadUrl'");
+      final isNewer = forceMockUpdate || _isNewerVersion(tagName, currentVersion, currentBuild);
+      final activeDownloadUrl = downloadUrl ?? "https://github.com/$repoOwner/$repoName/releases/download/$tagName/app-release.apk";
+      debugPrint("[UpdateService] Comparison -> Installed: '$currentVersion+$currentBuild' | GitHub Tag: '$tagName' | isNewer: $isNewer | downloadUrl: '$activeDownloadUrl'");
 
-      if (isNewer && downloadUrl != null) {
+      if (isNewer) {
+        updateFound = true;
         debugPrint("[UpdateService] New update detected! Showing bottom sheet update prompt.");
         final activeContext = context.mounted ? context : navigatorKey.currentContext;
         if (activeContext != null && activeContext.mounted) {
-          _showUpdateBottomSheet(activeContext, tagName, body, downloadUrl);
+          await _showUpdateBottomSheet(activeContext, tagName, body, activeDownloadUrl);
         }
       } else if (showNoUpdateToast) {
         final activeContext = context.mounted ? context : navigatorKey.currentContext;
@@ -98,6 +102,7 @@ class UpdateService {
     } finally {
       _isChecking = false;
     }
+    return updateFound;
   }
 
   bool _isNewerVersion(String tagName, String currentVersion, String currentBuild) {
@@ -129,8 +134,8 @@ class UpdateService {
     }
   }
 
-  void _showUpdateBottomSheet(BuildContext context, String tagName, String changelog, String downloadUrl) {
-    showModalBottomSheet(
+  Future<void> _showUpdateBottomSheet(BuildContext context, String tagName, String changelog, String downloadUrl) async {
+    await showModalBottomSheet(
       context: context,
       isDismissible: true,
       backgroundColor: Colors.transparent,

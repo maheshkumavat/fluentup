@@ -20,7 +20,7 @@ class DbHelper {
 
     return await openDatabase(
       path,
-      version: 13,
+      version: 14,
       onCreate: _createDB,
       onUpgrade: _onUpgrade,
     );
@@ -190,6 +190,15 @@ class DbHelper {
         score INTEGER NOT NULL,
         attempt_number INTEGER NOT NULL,
         date TEXT NOT NULL
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS coin_redemptions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        item_name TEXT NOT NULL,
+        cost INTEGER NOT NULL,
+        timestamp TEXT NOT NULL
       )
     ''');
   }
@@ -363,6 +372,16 @@ class DbHelper {
           score INTEGER NOT NULL,
           attempt_number INTEGER NOT NULL,
           date TEXT NOT NULL
+        )
+      ''');
+    }
+    if (oldVersion < 14) {
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS coin_redemptions (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          item_name TEXT NOT NULL,
+          cost INTEGER NOT NULL,
+          timestamp TEXT NOT NULL
         )
       ''');
     }
@@ -954,5 +973,21 @@ class DbHelper {
     await db.delete('roadmap_progress');
     await db.delete('grammar_mastery');
     await db.delete('unit_notes');
+    await db.delete('coin_redemptions');
+  }
+
+  // Coin Redemptions CRUD
+  Future<int> insertCoinRedemption(String itemName, int cost) async {
+    final db = await instance.database;
+    return await db.insert('coin_redemptions', {
+      'item_name': itemName,
+      'cost': cost,
+      'timestamp': DateTime.now().toIso8601String(),
+    });
+  }
+
+  Future<List<Map<String, dynamic>>> getCoinRedemptions() async {
+    final db = await instance.database;
+    return await db.query('coin_redemptions', orderBy: 'id DESC');
   }
 }

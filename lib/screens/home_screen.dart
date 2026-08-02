@@ -26,6 +26,7 @@ import 'topic_library_screen.dart';
 import 'vocabulary_screen.dart';
 import 'real_world_missions_screen.dart';
 import 'sound_practice_screen.dart';
+import 'leaderboard_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -177,9 +178,9 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
-                color: AppTheme.primary.withOpacity(0.12),
+                color: AppTheme.primary.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppTheme.primary.withOpacity(0.3)),
+                border: Border.all(color: AppTheme.primary.withValues(alpha: 0.3)),
               ),
               child: Row(
                 children: [
@@ -196,6 +197,51 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
+            ),
+            const SizedBox(width: 8),
+
+            // Coin Balance Badge
+            GestureDetector(
+              onTap: () {
+                setState(() => _currentIndex = 3); // Navigate to profile tab
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFB300).withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: const Color(0xFFFFB300).withValues(alpha: 0.4)),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.monetization_on_outlined, color: Color(0xFFFFB300), size: 18),
+                    const SizedBox(width: 3),
+                    Text(
+                      "${progressProvider.coins}",
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFE65100),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(width: 6),
+
+            // Leaderboard Icon Action
+            IconButton(
+              icon: const Icon(Icons.emoji_events, color: AppTheme.secondaryAccent, size: 22),
+              tooltip: "Leaderboard",
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const LeaderboardScreen()),
+                );
+              },
             ),
           ],
         ),

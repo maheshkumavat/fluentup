@@ -7,12 +7,15 @@ import '../providers/vocabulary_provider.dart';
 import '../providers/progress_provider.dart';
 import '../providers/practice_call_provider.dart';
 import '../providers/real_world_mission_provider.dart';
+import '../providers/mission_provider.dart';
+import '../providers/roadmap_provider.dart';
 import '../services/db_helper.dart';
 import '../services/supabase_service.dart';
 import '../services/learner_profile_service.dart';
 import '../services/update_service.dart';
 import '../widgets/level_ladder.dart';
 import '../theme.dart';
+import 'leaderboard_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -322,7 +325,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
+
+              // Leaderboard Card & Coin Store Section
+              _buildLeaderboardCard(),
+              _buildCoinStoreSection(progressProvider),
+              const SizedBox(height: 20),
 
               // Historical Score Trend Chart (fl_chart)
               if (callProvider.scoreHistory.isNotEmpty) ...[
@@ -488,6 +496,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
               const SizedBox(height: 12),
+
+              // Leaderboard Privacy Opt-Out Switch
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text(
+                  "Show me on the Leaderboard",
+                  style: TextStyle(fontFamily: 'Inter', fontSize: 15, color: AppTheme.textPrimary),
+                ),
+                subtitle: const Text(
+                  "Display your stats publicly on the global leaderboard",
+                  style: TextStyle(fontFamily: 'Inter', fontSize: 12, color: AppTheme.textSecondary),
+                ),
+                value: progressProvider.leaderboardOptIn,
+                activeColor: AppTheme.primary,
+                onChanged: (val) => progressProvider.toggleLeaderboardOptIn(val),
+              ),
+              const Divider(height: 1, color: AppTheme.hairline),
 
               // Auto-read Replies Toggle
               SwitchListTile(
@@ -904,5 +929,366 @@ class _ProfileScreenState extends State<ProfileScreen> {
         );
       }
     }
+  }
+
+  Widget _buildLeaderboardCard() {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceContainer,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppTheme.hairline),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: AppTheme.secondaryAccent.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Icon(Icons.emoji_events, color: AppTheme.secondaryAccent, size: 28),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "GLOBAL LEADERBOARD",
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.8,
+                    color: AppTheme.textSecondary,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                const Text(
+                  "Compete & Learn Together",
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppTheme.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                const Text(
+                  "See how your XP ranks against fellow speakers.",
+                  style: TextStyle(fontFamily: 'Inter', fontSize: 12, color: AppTheme.textSecondary),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppTheme.primary,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            ),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const LeaderboardScreen()),
+              );
+            },
+            child: const Text("View", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCoinStoreSection(ProgressProvider progressProvider) {
+    final missionProvider = Provider.of<MissionProvider>(context, listen: false);
+
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 24),
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceContainer,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFFFB300).withValues(alpha: 0.4)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.monetization_on_outlined, color: Color(0xFFFFB300), size: 24),
+                  const SizedBox(width: 8),
+                  const Text(
+                    "COINS STORE",
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.5,
+                      color: AppTheme.textPrimary,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFB300).withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: const Color(0xFFFFB300).withValues(alpha: 0.5)),
+                ),
+                child: Text(
+                  "${progressProvider.coins} Coins",
+                  style: const TextStyle(
+                    fontFamily: 'JetBrains Mono',
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFE65100),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          const Text(
+            "Earn coins alongside XP for completing missions and lessons. Redeem them below:",
+            style: TextStyle(fontFamily: 'Inter', fontSize: 12, color: AppTheme.textSecondary),
+          ),
+          const SizedBox(height: 16),
+
+          // 1. Streak Freeze Card
+          _buildRedeemItemTile(
+            icon: Icons.ac_unit,
+            iconColor: Colors.lightBlue,
+            title: "Streak Freeze",
+            subtitle: "Protects your streak for 1 missed day (${progressProvider.streakFreezes} active)",
+            cost: 50,
+            canAfford: progressProvider.coins >= 50,
+            onRedeem: () async {
+              final success = await progressProvider.redeemStreakFreeze();
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(success ? "Streak Freeze redeemed!" : "Not enough coins for Streak Freeze."),
+                  ),
+                );
+              }
+            },
+          ),
+          const SizedBox(height: 10),
+
+          // 2. Extra Hint Token Card
+          _buildRedeemItemTile(
+            icon: Icons.lightbulb_outline,
+            iconColor: Colors.amber,
+            title: "Extra Hint Token",
+            subtitle: "Reveals answer tip immediately in Grammar Gym (${progressProvider.extraHints} available)",
+            cost: 10,
+            canAfford: progressProvider.coins >= 10,
+            onRedeem: () async {
+              final success = await progressProvider.redeemExtraHint();
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(success ? "Extra Hint Token redeemed!" : "Not enough coins for Extra Hint."),
+                  ),
+                );
+              }
+            },
+          ),
+          const SizedBox(height: 10),
+
+          // 3. Skip Today's Mission Card
+          _buildRedeemItemTile(
+            icon: Icons.fast_forward_rounded,
+            iconColor: Colors.purple,
+            title: "Skip Today's Mission",
+            subtitle: "Marks today complete without doing it (Limit: 1/week)",
+            cost: 100,
+            canAfford: progressProvider.coins >= 100,
+            onRedeem: () async {
+              final allowed = await progressProvider.canSkipMissionThisWeek();
+              if (!allowed) {
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Mission Skip can only be redeemed once per week.")),
+                  );
+                }
+                return;
+              }
+              final success = await progressProvider.redeemSkipMission();
+              if (success) {
+                final uncompleted = missionProvider.missions.where((m) => !m.isCompleted).toList();
+                if (uncompleted.isNotEmpty) {
+                  final roadmapProvider = Provider.of<RoadmapProvider>(context, listen: false);
+                  await missionProvider.completeMission(uncompleted.first.id, progressProvider, roadmapProvider: roadmapProvider);
+                }
+              }
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(success ? "Today's mission skipped & bonus XP awarded!" : "Could not skip mission."),
+                  ),
+                );
+              }
+            },
+          ),
+          const SizedBox(height: 12),
+
+          // Redemption History Link
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton.icon(
+              onPressed: () => _showRedemptionHistoryModal(context),
+              icon: const Icon(Icons.history, size: 16, color: AppTheme.primary),
+              label: const Text("Redemption History", style: TextStyle(fontFamily: 'Inter', fontSize: 13, color: AppTheme.primary)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRedeemItemTile({
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required String subtitle,
+    required int cost,
+    required bool canAfford,
+    required VoidCallback onRedeem,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: AppTheme.background,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: AppTheme.hairline),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: iconColor.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, color: iconColor, size: 20),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
+                ),
+                Text(
+                  subtitle,
+                  style: const TextStyle(fontFamily: 'Inter', fontSize: 11, color: AppTheme.textSecondary),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              foregroundColor: canAfford ? AppTheme.primary : AppTheme.textSecondary,
+              side: BorderSide(color: canAfford ? AppTheme.primary : AppTheme.hairline),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            ),
+            onPressed: canAfford ? onRedeem : null,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.monetization_on_outlined, size: 14, color: Color(0xFFFFB300)),
+                const SizedBox(width: 4),
+                Text("$cost", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showRedemptionHistoryModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isDismissible: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return Container(
+          padding: const EdgeInsets.all(20),
+          decoration: const BoxDecoration(
+            color: AppTheme.background,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Row(
+                children: [
+                  Icon(Icons.history, color: AppTheme.primary, size: 22),
+                  SizedBox(width: 8),
+                  Text(
+                    "Redemption History",
+                    style: TextStyle(fontFamily: 'Inter', fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Flexible(
+                child: FutureBuilder<List<Map<String, dynamic>>>(
+                  future: DbHelper.instance.getCoinRedemptions(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+                    final redemptions = snapshot.data!;
+                    if (redemptions.isEmpty) {
+                      return const Padding(
+                        padding: EdgeInsets.all(24.0),
+                        child: Center(
+                          child: Text("No redemptions yet. Complete missions to earn coins!", style: TextStyle(color: AppTheme.textSecondary)),
+                        ),
+                      );
+                    }
+                    return ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: redemptions.length,
+                      separatorBuilder: (_, __) => const Divider(height: 1, color: AppTheme.hairline),
+                      itemBuilder: (context, index) {
+                        final item = redemptions[index];
+                        final name = item['item_name'] as String? ?? 'Redemption';
+                        final cost = item['cost'] as int? ?? 0;
+                        final dateStr = item['timestamp'] as String? ?? '';
+                        String formattedDate = dateStr.length >= 10 ? dateStr.substring(0, 10) : dateStr;
+
+                        return ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text(name, style: const TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.bold, color: AppTheme.textPrimary)),
+                          subtitle: Text(formattedDate, style: const TextStyle(fontFamily: 'Inter', fontSize: 12, color: AppTheme.textSecondary)),
+                          trailing: Text("-$cost coins", style: const TextStyle(fontFamily: 'JetBrains Mono', fontSize: 13, fontWeight: FontWeight.bold, color: AppTheme.error)),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
